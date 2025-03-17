@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Health Monitoring Dashboard</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f0f0f0;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .chart-container {
+            width: 45%;
+            height: 300px;
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container text-center">
+        <h1>Health Monitoring Dashboard</h1>
+        <form>
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" class="form-control" required>
+            </div>
+            <button type="button" class="btn btn-primary" onclick="loadCharts()">Login</button>
+        </form>
+
+        <div id="dashboard" style="display: none;">
+            <div class="d-flex flex-wrap justify-content-around mt-5">
+                <div class="chart-container">
+                    <canvas id="stepsChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <canvas id="heartRateChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <canvas id="caloriesChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <canvas id="sleepChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS & dependencies (Optional but recommended) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        function loadCharts() {
+    // Example: Check login (This is just for testing, replace with your own backend authentication)
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
+
+    if (username === "admin" && password === "password") { // Test Login
+        document.querySelector("form").style.display = "none"; // Hide the login form
+        document.getElementById("dashboard").style.display = "block";
+        
+        // Example Data (Replace with your dynamic data later)
+        const stepsData = [3000, 4000, 5000, 4500, 4800, 5200, 6000];
+        const heartRateData = [70, 75, 80, 78, 82, 85, 78];
+        const caloriesData = [200, 300, 250, 270, 290, 320, 350];
+        const sleepData = [6, 7.5, 8, 5.5, 7, 6.5, 8];
+
+        // Render Step Count Chart
+        new Chart(document.getElementById("stepsChart"), {
+    type: 'bar',  // Changed from 'line' to 'bar'
+    data: {
+        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+        datasets: [{ 
+            label: 'Step Count',
+            data: stepsData,
+            backgroundColor: 'blue'  // Bar color
+        }]
+    },
+    options: {
+        responsive: true,
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+
+
+        // Render Heart Rate Chart
+        new Chart(document.getElementById("heartRateChart"), {
+            type: 'line',
+            data: {
+                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                datasets: [{ 
+                    label: 'Heart Rate',
+                    data: heartRateData,
+                    borderColor: 'red',
+                    fill: false
+                }]
+            }
+        });
+
+        // Render Calories Burned Chart
+        new Chart(document.getElementById("caloriesChart"), {
+            type: 'line',
+            data: {
+                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                datasets: [{ 
+                    label: 'Calories Burned',
+                    data: caloriesData,
+                    borderColor: 'green',
+                    fill: false
+                }]
+            }
+        });
+
+        // Render Sleep Pattern Chart
+        new Chart(document.getElementById("sleepChart"), {
+            type: 'line',
+            data: {
+                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                datasets: [{ 
+                    label: 'Sleep Hours',
+                    data: sleepData,
+                    borderColor: 'purple',
+                    fill: false
+                }]
+            }
+        });
+    } else {
+        alert("Invalid Username or Password");
+    }
+}
+
+    </script>
+</body>
+</html>
