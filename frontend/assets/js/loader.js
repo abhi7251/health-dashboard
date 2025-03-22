@@ -65,6 +65,13 @@ document.addEventListener("click", function (event) {
 });
 
 
+$(document).ready(function() {
+    $(".nav-item a").click(function() {
+        $(".nav-item a").removeClass("active");  // Remove 'active' from all <a> tags
+        $(this).addClass("active");  // Add 'active' to the clicked <a> tag
+    });
+});
+
 document.addEventListener("mousedown", function (event) {
     let togglePass = event.target.closest("#togglePass");
     if (togglePass) {
@@ -73,7 +80,6 @@ document.addEventListener("mousedown", function (event) {
 
         if (passwordField) {
             passwordField.type = "text";  // Show password
-            if (icon) icon.classList.replace("bi-eye", "bi-eye-slash"); // Change to eye-slash
         }
     }
 });
@@ -86,24 +92,10 @@ document.addEventListener("mouseup", function (event) {
 
         if (passwordField) {
             passwordField.type = "password";  // Hide password
-            if (icon) icon.classList.replace("bi-eye-slash", "bi-eye"); // Change back to eye
         }
     }
 });
 
-// Optional: Also hide password if mouse leaves the button
-document.addEventListener("mouseleave", function (event) {
-    let togglePass = event.target.closest("#togglePass");
-    if (togglePass) {
-        let passwordField = document.getElementById("passField");
-        let icon = togglePass.querySelector("i");
-
-        if (passwordField) {
-            passwordField.type = "password";  // Hide password
-            if (icon) icon.classList.replace("bi-eye-slash", "bi-eye"); // Reset icon
-        }
-    }
-});
 
 
 document.getElementById('loginLink').addEventListener('click', function(event) {
