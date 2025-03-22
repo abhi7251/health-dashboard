@@ -1,77 +1,115 @@
-// Initialize Charts
 let charts = {
     steps: null,
     heartRate: null,
     sleep: null
 };
 
-// Fetch Data from Backend API
-function fetchData(endpoint) {
-    return $.ajax({
-        url: `/health-dashboard/backend/api/${endpoint}.php`,
-        method: 'GET',
-        dataType: 'json'
-    });
+// Fetch Data from Backend API using AJAX (XMLHttpRequest)
+function fetchData(endpoint, callback) {
+    let xhr = new XMLHttpRequest();
+    xhr.open('GET', `/health-dashboard/backend/api/${endpoint}.php`, true);
+    xhr.responseType = 'json';
+
+    xhr.onload = function () {
+        if (xhr.status >= 200 && xhr.status < 300) {
+            callback(null, xhr.response);
+        } else {
+            callback(`Error: ${xhr.status}`, null);
+        }
+    };
+
+    xhr.onerror = function () {
+        callback('Request failed', null);
+    };
+
+    xhr.send();
 }
 
 // Initialize All Charts
-async function initializeDashboard() {
-    try {
-        // Fetch Data from APIs
-        const [stepsData, heartData, sleepData] = await Promise.all([
-            fetchData('steps'),
-            fetchData('heartrate'),
-            fetchData('sleep')
-        ]);
+function initializeDashboard() {
+    let stepsData, heartData, sleepData;
 
-        // Hide Loading Message
-        $('#loading').hide();
-        $('#dashboard').show();
+    fetchData('steps', (err, data) => {
+        if (err) {
+            console.error('Error fetching steps data:', err);
+            showError();
+        } else {
+            stepsData = data;
+            createCharts();
+        }
+    });
 
-        // Create Charts
-        charts.steps = new Chart(document.getElementById('stepsChart'), {
-            type: 'line',
-            data: {
-                labels: stepsData.dates,
-                datasets: [{
-                    label: 'Steps',
-                    data: stepsData.values,
-                    borderColor: '#4CAF50',
-                    tension: 0.4
-                }]
-            }
-        });
+    fetchData('heartrate', (err, data) => {
+        if (err) {
+            console.error('Error fetching heart rate data:', err);
+            showError();
+        } else {
+            heartData = data;
+            createCharts();
+        }
+    });
 
-        charts.heartRate = new Chart(document.getElementById('heartRateChart'), {
-            type: 'bar',
-            data: {
-                labels: heartData.dates,
-                datasets: [{
-                    label: 'BPM',
-                    data: heartData.values,
-                    backgroundColor: '#f44336'
-                }]
-            }
-        });
+    fetchData('sleep', (err, data) => {
+        if (err) {
+            console.error('Error fetching sleep data:', err);
+            showError();
+        } else {
+            sleepData = data;
+            createCharts();
+        }
+    });
 
-        charts.sleep = new Chart(document.getElementById('sleepChart'), {
-            type: 'doughnut',
-            data: {
-                labels: ['Deep Sleep', 'Light Sleep', 'REM', 'Awake'],
-                datasets: [{
-                    data: sleepData.values,
-                    backgroundColor: ['#2196F3', '#03A9F4', '#00BCD4', '#B2EBF2']
-                }]
-            }
-        });
+    function createCharts() {
+        if (stepsData && heartData && sleepData) {
+            // Hide Loading Message & Show Dashboard
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'block';
 
-    } catch (error) {
-        console.error('Error initializing dashboard:', error);
-        $('#loading').html('<div class="alert alert-danger">Failed to load data</div>');
+            // Create Charts
+            charts.steps = new Chart(document.getElementById('stepsChart'), {
+                type: 'line',
+                data: {
+                    labels: stepsData.dates,
+                    datasets: [{
+                        label: 'Steps',
+                        data: stepsData.values,
+                        borderColor: '#4CAF50',
+                        tension: 0.4
+                    }]
+                }
+            });
+
+            charts.heartRate = new Chart(document.getElementById('heartRateChart'), {
+                type: 'bar',
+                data: {
+                    labels: heartData.dates,
+                    datasets: [{
+                        label: 'BPM',
+                        data: heartData.values,
+                        backgroundColor: '#f44336'
+                    }]
+                }
+            });
+
+            charts.sleep = new Chart(document.getElementById('sleepChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['Deep Sleep', 'Light Sleep', 'REM', 'Awake'],
+                    datasets: [{
+                        data: sleepData.values,
+                        backgroundColor: ['#2196F3', '#03A9F4', '#00BCD4', '#B2EBF2']
+                    }]
+                }
+            });
+        }
     }
 }
 
+// Show Error Message if Data Fetch Fails
+function showError() {
+    const loadingDiv = document.getElementById('loading');
+    loadingDiv.innerHTML = '<div class="alert alert-danger">Failed to load data</div>';
+}
+
 // Start Dashboard
-$(document).ready(function() {
-    initializeDashboard();
-});
+document.addEventListener('DOMContentLoaded', initializeDashboard);
