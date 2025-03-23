@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $mobile = trim($_POST['mobile']);
     $password = trim($_POST['password']);
 
-    if (empty($name) || empty($username) || empty($email) || empty($mobile) || empty($password)) {
+    if (empty($name) || empty($username) || empty($email)  || empty($password)) {
         die('All fields are required.');
     }
 

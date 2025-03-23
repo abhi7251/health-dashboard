@@ -12,29 +12,36 @@
 </head>
 
 <body>
-    <div class="my-4 mx-5 mt-5 pt-5">
+    <div class="my-4 mx-5 mt-5 pt-5 pb-5">
         <div class="row d-flex d-xl-flex justify-content-center justify-content-xl-center">
             <div class="col-sm-12 col-lg-10 col-xl-9 col-xxl-7 bg-white shadow-lg" style="border-radius: 5px;">
                 <div class="p-5 pt-4">
                     <div class="text-center">
                         <h4 class="text-dark mb-4">Create an Account!</h4>
                     </div>
-                    <form class="user">
-                        <div class="mb-3"><input class="form-control form-control-user" type="text" placeholder="Username" required=""></div>
-                        <div class="mb-3"><input class="form-control form-control-user" type="email" id="email" placeholder="Email Address" required="" pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"></div>
+                    <form class="user" method="post" action="../backend/register.php">
+                        <div class="mb-3"><input class="form-control form-control-user" type="text" placeholder="Username" required="yes" name="username" autofocus="" minlength="3"></div>
+
+                        <div><input class="form-control form-control-user mb-3" type="text" placeholder="Name" required="yes" name="name" autofocus="" minlength="3"></div>
+
+                        <div class="mb-3"><input class="form-control form-control-user" type="email" id="email" placeholder="Email Address" required="" name="email" autofocus="yes" pattern="[^@\s]+@[^@\s]+\.[^@\s]+"></div>
                         <div class="row mb-3">
-                            <div class="col-sm-6 mb-3 mb-sm-0"><input class="form-control form-control-user" type="password" id="password" placeholder="Password" required="" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&amp;])[A-Za-z\d@$!%*?&amp;]{8,}$"></div>
-                            <div class="col-sm-6"><input class="form-control form-control-user" type="password" id="verifyPassword" placeholder="Confirm Password" required="" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&amp;])[A-Za-z\d@$!%*?&amp;]{8,}$"></div>
+                            <div class="col-sm-6 mb-3 mb-sm-0">
+                                <div class="input-group"><input class="form-control" type="password" id="passField" name="password" autocomplete="off" required="" pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&amp;])[A-Za-z\d@$!%*?&amp;]{8,}" minlength="8" autofocus=""><button class="btn border rounded" type="button">
+                                    
+                                    
+                                    
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-eye" id="togglePass">
+                                            <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"></path>
+                                            <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0"></path>
+                                        </svg></button></div>
+
+                                        
+                            </div>
+                            <div class="col-sm-6"><input class="form-control form-control-user" type="password" id="verifyField" placeholder="Confirm Password" required="" autofocus=""></div>
                         </div>
-                        <div class="row mb-3 px-3"><input class="form-control ps-1" type="tel" placeholder="Phone Number" autocomplete="on" autofocus="" required="" minlength="10" maxlength="10" inputmode="tel" pattern="^\d{10}$"></div>
-                        <div class="row mb-3">
-                            <p id="emailErrorMsg" class="text-danger" style="display:none;">Paragraph</p>
-                            <p id="passwordErrorMsg" class="text-danger" style="display:none;">Paragraph</p>
-                        </div><button class="btn btn-primary d-block btn-user w-100" id="submitBtn" type="submit">Register Account</button>
-                        <hr>
+                        <div class="row mb-3 px-3 ms-0 ps-0"><input class="form-control ms-0" type="tel" placeholder="Phone Number" name = "mobile" autocomplete="on" autofocus="" required="no" minlength="10" maxlength="10" inputmode="tel" pattern="^\d{10}$"></div><button class="btn btn-primary d-block btn-user w-100" id="submitBtn" type="submit">Register Account</button>
                     </form>
-                    <div class="text-center"></div>
-                    <div class="text-center"></div>
                 </div>
             </div>
         </div>
