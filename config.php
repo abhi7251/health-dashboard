@@ -1,22 +1,30 @@
 <?php
+header('Content-Type: application/json');
+
 $host = 'localhost';
 $db_user = 'root';
 $db_pass = '';  // Leave this empty if there's no password
 $dbname = 'health_dashboard';
+
+$response = []; // Array to store response messages
 
 // Create connection
 $conn = new mysqli($host, $db_user, $db_pass);
 
 // Check connection
 if ($conn->connect_error) {
-    die('Connection failed: ' . $conn->connect_error);
+    echo json_encode(['status' => 'error', 'message' => 'Database connection failed: ' . $conn->connect_error]);
+    exit();
 }
 
 // Create database if it doesn't exist
 $sql = "CREATE DATABASE IF NOT EXISTS $dbname";
-if ($conn->query($sql) !== TRUE) {
-    die('Error creating database: ' . $conn->error);
+if (!$conn->query($sql)) {
+    echo json_encode(['status' => 'error', 'message' => 'Error creating database: ' . $conn->error]);
+    exit();
 }
+
+$response[] = 'Database check complete.';
 
 // Select the database
 $conn->select_db($dbname);
@@ -30,10 +38,12 @@ $tableSql = "CREATE TABLE IF NOT EXISTS users (
     password VARCHAR(255) NOT NULL
 )";
 
-if ($conn->query($tableSql) !== TRUE) {
-    die('Error creating table: ' . $conn->error);
+if (!$conn->query($tableSql)) {
+    echo json_encode(['status' => 'error', 'message' => 'Error creating table: ' . $conn->error]);
+    exit();
 }
 
-echo "Database and table setup completed successfully.";
 $conn->close();
+
+
 ?>

@@ -1,3 +1,4 @@
+loadGLBModel("watch", "assets/img/watch.glb", 1);
 function loadContent(page) {
     document.getElementById("content").innerHTML = "<p>Loading...</p>";
 
@@ -9,10 +10,24 @@ function loadContent(page) {
                 const parser = new DOMParser();
                 const doc = parser.parseFromString(data, "text/html");
                 const content = doc.getElementById("content");
-                document.getElementById("content").innerHTML = content ? content.innerHTML : "Error loading content.";
+                document.getElementById("content").innerHTML = content.innerHTML;
+                loadGLBModel("watch", "assets/img/watch.glb", 1);
+                setActiveLinkById("homeLink");
             } else {
+                if (page === "about.html") { 
+                    setActiveLinkById("aboutLink");
+                } else if (page === "dashboard.html") { 
+                    setActiveLinkById("activityLink");
+                }
                 document.getElementById("content").innerHTML = data;
             }
+
+            // Collapse the navbar after clicking a link
+            let navbar = document.getElementById("navcol-1");
+            let bsCollapse = new bootstrap.Collapse(navbar, {
+                toggle: false
+            });
+            bsCollapse.hide();
         })
         .catch(error => {
             document.getElementById("content").innerHTML = "<p>Error loading page.</p>";
@@ -20,45 +35,12 @@ function loadContent(page) {
         });
 }
 
-// Handle home links
-var elements = document.getElementsByClassName("homeLink");
-for (var i = 0; i < elements.length; i++) {
-    elements[i].addEventListener("click", function (event) {
-        event.preventDefault();
-        loadContent("index.html");
-    });
+
+
+function setActiveLinkById(linkId) {
+    $(".nav-item a").removeClass("active"); // Remove 'active' from all links
+    $("#" + linkId).addClass("active"); // Add 'active' to the selected link
 }
-
-// Handle other navigation links
-document.getElementById("aboutLink").addEventListener("click", function (event) {
-    event.preventDefault();
-    loadContent("about.html");
-});
-
-document.getElementById("activityLink").addEventListener("click", function (event) {
-    event.preventDefault();
-    loadContent("dashboard.html");
-});
-
-document.addEventListener("click", function (event) {
-    if (event.target.id === "registerLink") {
-        event.preventDefault();
-        loadContent("register.html");
-    }
-});
-
-document.getElementById("loginLink").addEventListener("click", function (event) {
-    event.preventDefault();
-    loadContent("login.html");
-});
-
-// jQuery for adding "active" class on navbar items
-$(document).ready(function () {
-    $(".nav-item a").click(function () {
-        $(".nav-item a").removeClass("active"); // Remove 'active' from all <a> tags
-        $(this).addClass("active"); // Add 'active' to the clicked <a> tag
-    });
-});
 
 // Toggle password visibility on mousedown
 document.addEventListener("mousedown", function (event) {
@@ -82,22 +64,27 @@ document.addEventListener("mouseup", function (event) {
     }
 });
 
-// Password match validation on form submit
-document.addEventListener("click", function (event) {
-    let form = event.target.closest("#submitBtn"); // Ensure we're checking the form
-    if (form) {
-        let passField = document.getElementById("passField");
-        let verifyField = document.getElementById("verifyField");
-               
+// Mobile Support
+document.addEventListener("touchstart", function (event) {
+    if (event.target.closest("#togglePass")) {
+        togglePasswordVisibility(true);
+    }
+});
 
-        if (passField && verifyField) {
-            if (passField.value === verifyField.value) {
-                verifyField.setCustomValidity("");
-            } else {
-                event.preventDefault(); // Stop form submission
-                verifyField.setCustomValidity("Passwords do not match.");
-                verifyField.reportValidity();
+document.addEventListener("touchend", function (event) {
+    if (event.target.closest("#togglePass")) {
+        togglePasswordVisibility(false);
+    }
+});
+
+
+$(document).ready(function () {
+    $(document).on("keypress", function (event) {
+        if (event.which === 13) { // Check if Enter key is pressed
+            let button = $("#submitBtn");
+            if (button.length) { // Ensure button exists
+                button.click();
             }
         }
-    }
+    });
 });
