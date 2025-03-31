@@ -1,20 +1,92 @@
 <!DOCTYPE html>
 <html data-bs-theme="light" lang="en">
-
 <head>
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>Health Dashboard</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="assets/css/Banner-Heading-Image-images.css?h=4f3cfa46e40e236365345fc77963f4b8">
-    <link rel="stylesheet" href="assets/css/Navbar-With-Button-icons.css?h=31d833f28f7fb98afe45f9f44a8c1344">
-    <link rel="stylesheet" href="assets/css/styles.css?h=96299e5c0bfdd72a2aecaeaadafed39c">
+    <link rel="stylesheet" href="assets/css/Banner-Heading-Image-images.css">
+    <link rel="stylesheet" href="assets/css/Navbar-With-Button-icons.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+  
+    <style>
+        .chart-container {
+            width: 30%;
+            margin: auto;
+            text-align: center;
+            display: inline-block;
+        }
+        .chart-label {
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+    </style>
 </head>
+<body class="animate__animated animate__fadeIn">
+    <!-- ...existing code... -->
 
-<body>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="assets/js/bs-init.js?h=4777463a3dc87e6b53aab58f966705fb"></script>
+    <div class="container mt-4" id="dashboard">
+        <div class="position-relative mb-3">
+            <h2 class="text-center">Activity Dashboard</h2>
+            <button class="btn btn-primary position-absolute top-0 end-0" onclick="syncData()">
+                <i class="fas fa-sync-alt"></i> Sync Data
+            </button>
+        </div>
+        
+        
+        <div class="row text-center">
+            <div class="chart-container">
+                <canvas id="stepsChart"></canvas>
+                <div id="steps" class="chart-label">Steps: 0</div>
+            </div>
+            <div class="chart-container">
+                <canvas id="caloriesChart"></canvas>
+                <div id="calories" class="chart-label">Calories: 0</div>
+            </div>
+            <div class="chart-container">
+                <canvas id="heartRateChart"></canvas>
+                <div id="heartRate" class="chart-label">Heart Rate: 0 bpm</div>
+            </div>
+        </div>
+        <div class="row text-center mt-3">
+            <div class="chart-container">
+                <canvas id="waterChart"></canvas>
+                <div id="water" class="chart-label">Water Intake: 0 L</div>
+            </div>
+            <div class="chart-container">
+                <canvas id="sleepChart"></canvas>
+                <div id="sleep" class="chart-label">Sleep: 0 hrs</div>
+            </div>
+            <div class="chart-container">
+                <canvas id="weightChart"></canvas>
+                <div id="weight" class="chart-label">Weight: 0 kg</div>
+            </div>
+        </div>
+        
+        
+        <div class="mt-4">
+            <label for="timeRange" class="form-label">Select Time Range:</label>
+            <select id="timeRange" class="form-select" onchange="updateChart()">
+                <option value="weekly">Weekly</option>
+                <option value="monthly">Monthly</option>
+            </select>
+        </div>
+        
+        <!-- Fitness Chart -->
+        <canvas id="fitnessChart" class="mt-3"></canvas>
+
+        <!-- Additional Calorie Chart for better understanding -->
+        <canvas id="calorieChart" class="mt-3"></canvas>
+    </div>
+    
+    
 </body>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/bs-init.js?h=4777463a3dc87e6b53aab58f966705fb"></script>
 </html>

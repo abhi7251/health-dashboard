@@ -1,115 +1,50 @@
-let charts = {
-    steps: null,
-    heartRate: null,
-    sleep: null
-};
 
-// Fetch Data from Backend API using AJAX (XMLHttpRequest)
-function fetchData(endpoint, callback) {
-    let xhr = new XMLHttpRequest();
-    xhr.open('GET', `/health-dashboard/backend/api/${endpoint}.php`, true);
-    xhr.responseType = 'json';
-
-    xhr.onload = function () {
-        if (xhr.status >= 200 && xhr.status < 300) {
-            callback(null, xhr.response);
-        } else {
-            callback(`Error: ${xhr.status}`, null);
-        }
-    };
-
-    xhr.onerror = function () {
-        callback('Request failed', null);
-    };
-
-    xhr.send();
-}
-
-// Initialize All Charts
-function initializeDashboard() {
-    let stepsData, heartData, sleepData;
-
-    fetchData('steps', (err, data) => {
-        if (err) {
-            console.error('Error fetching steps data:', err);
-            showError();
-        } else {
-            stepsData = data;
-            createCharts();
-        }
-    });
-
-    fetchData('heartrate', (err, data) => {
-        if (err) {
-            console.error('Error fetching heart rate data:', err);
-            showError();
-        } else {
-            heartData = data;
-            createCharts();
-        }
-    });
-
-    fetchData('sleep', (err, data) => {
-        if (err) {
-            console.error('Error fetching sleep data:', err);
-            showError();
-        } else {
-            sleepData = data;
-            createCharts();
-        }
-    });
-
-    function createCharts() {
-        if (stepsData && heartData && sleepData) {
-            // Hide Loading Message & Show Dashboard
-            document.getElementById('loading').style.display = 'none';
-            document.getElementById('dashboard').style.display = 'block';
-
-            // Create Charts
-            charts.steps = new Chart(document.getElementById('stepsChart'), {
-                type: 'line',
-                data: {
-                    labels: stepsData.dates,
-                    datasets: [{
-                        label: 'Steps',
-                        data: stepsData.values,
-                        borderColor: '#4CAF50',
-                        tension: 0.4
-                    }]
+function createSemiCircleChart(chartId, value, maxValue, color) {
+    const canvas = document.getElementById(chartId);
+   
+    if (canvas) {
+        const ctx = canvas.getContext('2d');
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                datasets: [{
+                    data: [value, maxValue - value],
+                    backgroundColor: [color, '#ddd'],
+                    borderWidth: 0,
+                }]
+            },
+            options: {
+                responsive: true,
+                cutout: '80%',
+                rotation: -90,
+                circumference: 180,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: { enabled: false }
                 }
-            });
-
-            charts.heartRate = new Chart(document.getElementById('heartRateChart'), {
-                type: 'bar',
-                data: {
-                    labels: heartData.dates,
-                    datasets: [{
-                        label: 'BPM',
-                        data: heartData.values,
-                        backgroundColor: '#f44336'
-                    }]
-                }
-            });
-
-            charts.sleep = new Chart(document.getElementById('sleepChart'), {
-                type: 'doughnut',
-                data: {
-                    labels: ['Deep Sleep', 'Light Sleep', 'REM', 'Awake'],
-                    datasets: [{
-                        data: sleepData.values,
-                        backgroundColor: ['#2196F3', '#03A9F4', '#00BCD4', '#B2EBF2']
-                    }]
-                }
-            });
-        }
+            }
+        });
+    } else {
+        console.error(`Canvas element with id '${chartId}' not found.`);
     }
 }
 
-// Show Error Message if Data Fetch Fails
-function showError() {
-    const loadingDiv = document.getElementById('loading');
-    loadingDiv.innerHTML = '<div class="alert alert-danger">Failed to load data</div>';
-}
 
-// Start Dashboard
-document.addEventListener('DOMContentLoaded', initializeDashboard);
+document.addEventListener('DOMContentLoaded', function () {
+        if(document.getElementById("dashboard")){
+            console.log("set");
+            createSemiCircleChart('stepsChart', 4500, 10000, '#4caf50');
+            createSemiCircleChart('caloriesChart', 1200, 2500, '#ff9800');
+            createSemiCircleChart('heartRateChart', 75, 200, '#f44336');
+            createSemiCircleChart('waterChart', 1.5, 3, '#2196f3');
+            createSemiCircleChart('sleepChart', 6, 8, '#9c27b0');
+            createSemiCircleChart('weightChart', 70, 100, '#795548');
+        } 
+});
+
+
+
+
+function syncData(){
+    showAlert("Syncing data...", "info", 1000);
+}
