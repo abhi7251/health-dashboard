@@ -15,73 +15,179 @@
   
     <style>
         .chart-container {
-            width: 30%;
-            margin: auto;
-            text-align: center;
-            display: inline-block;
+            width: 20%;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: transform 0.2s ease;
         }
+
+        .chart-container:hover {
+            transform: scale(1.05);
+        }
+
+        .chart-container.active {
+            border: 3px solid #007bff; /* Slightly thicker border */
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3); /* Adds a glowing effect */
+            transform: scale(1.05); /* Slight zoom effect */
+        }
+
+        /* Optional: Add background gradient for active chart */
+        .chart-container.active::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 123, 255, 0.1); /* Light blue overlay */
+            border-radius: inherit;
+        }
+
         .chart-label {
-            font-size: 16px;
-            font-weight: bold;
-            margin-top: 10px;
+            position: absolute;
+            top: 60%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            width: 100%;
         }
+
+        .chart-value {
+            font-size: 22px;
+            font-weight: bold;
+            display: block;
+        }
+
+        .chart-title {
+            font-size: 18px;
+            color: #666;
+            display: block;
+            margin-top: 5px;
+        }
+
+        /* Adjustments for tablets */
+        @media (max-width: 1024px) {
+            .chart-value {
+                font-size: 20px;
+            }
+            .chart-title {
+                font-size: 16px;
+            }
+
+            .chart-container {
+                width: 40%;
+            }
+        }
+
+        /* Adjustments for smaller screens */
+        @media (max-width: 768px) {
+            .chart-value {
+                font-size: 18px;
+            }
+            .chart-title {
+                font-size: 14px;
+            }
+            .chart-container {
+                width: 60%;
+            }
+        }
+        canvas {
+            width: 100%;
+            height: auto;
+        }
+        
+        .charts-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            margin-bottom: 15px;
+        }
+        .detail-chart-title {
+            text-align: center;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
     </style>
 </head>
 <body class="animate__animated animate__fadeIn">
     <!-- ...existing code... -->
 
-    <div class="container mt-4" id="dashboard">
+    <div class="container mt-4 " id="dashboard">
         <div class="position-relative mb-3">
-            <h2 class="text-center">Activity Dashboard</h2>
-            <button class="btn btn-primary position-absolute top-0 end-0" onclick="syncData()">
+            <h2 class="text-center" style="font-weight: bolder;">Activity Dashboard</h2>
+            <button class="btn btn-primary btn-sm position-absolute top-0 end-0" onclick="syncData()">
                 <i class="fas fa-sync-alt"></i> Sync Data
             </button>
         </div>
         
         
-        <div class="row text-center">
-            <div class="chart-container">
+        <div class="charts-row p-3">
+            <div class="chart-container" onclick="showDetailChart('steps')">
                 <canvas id="stepsChart"></canvas>
-                <div id="steps" class="chart-label">Steps: 0</div>
+                <div class="chart-label">
+                    <span class="chart-value">4,500</span>
+                    <span class="chart-title">Steps</span>
+                </div>
             </div>
-            <div class="chart-container">
+            <div class="chart-container" onclick="showDetailChart('calories')">
                 <canvas id="caloriesChart"></canvas>
-                <div id="calories" class="chart-label">Calories: 0</div>
+                <div class="chart-label">
+                    <span class="chart-value">1,200</span>
+                    <span class="chart-title">Calories</span>
+                </div>
             </div>
-            <div class="chart-container">
+            <div class="chart-container" onclick="showDetailChart('heartRate')">
                 <canvas id="heartRateChart"></canvas>
-                <div id="heartRate" class="chart-label">Heart Rate: 0 bpm</div>
+                <div class="chart-label">
+                    <span class="chart-value">75</span>
+                    <span class="chart-title">Heart Rate</span>
+                </div>
             </div>
         </div>
-        <div class="row text-center mt-3">
-            <div class="chart-container">
+        
+        <div class="charts-row">
+            <div class="chart-container" onclick="showDetailChart('water')">
                 <canvas id="waterChart"></canvas>
-                <div id="water" class="chart-label">Water Intake: 0 L</div>
+                <div class="chart-label">
+                    <span class="chart-value">1.5 L</span>
+                    <span class="chart-title">Water</span>
+                </div>
             </div>
-            <div class="chart-container">
+            <div class="chart-container" onclick="showDetailChart('sleep')">
                 <canvas id="sleepChart"></canvas>
-                <div id="sleep" class="chart-label">Sleep: 0 hrs</div>
+                <div class="chart-label">
+                    <span class="chart-value">6 hrs</span>
+                    <span class="chart-title">Sleep</span>
+                </div>
             </div>
-            <div class="chart-container">
+            <div class="chart-container" onclick="showDetailChart('weight')">
                 <canvas id="weightChart"></canvas>
-                <div id="weight" class="chart-label">Weight: 0 kg</div>
+                <div class="chart-label">
+                    <span class="chart-value">70 kg</span>
+                    <span class="chart-title">Weight</span>
+                </div>
             </div>
         </div>
         
-        
-        <div class="mt-4">
-            <label for="timeRange" class="form-label">Select Time Range:</label>
-            <select id="timeRange" class="form-select" onchange="updateChart()">
-                <option value="weekly">Weekly</option>
-                <option value="monthly">Monthly</option>
-            </select>
+        <div class="detail-chart-container mt-5 mx-auto" style="max-width: 800px;">
+            <h4 id="detailChartTitle" class="detail-chart-title text-center mt-4">Steps History</h4>
+            <div class="d-flex justify-content-center mb-3">
+                <div class="btn-group" role="group" aria-label="Time range">
+                    <button type="button" class="btn btn-primary active" id="weeklyBtn" onclick="updateTimeRange('weekly')">Weekly</button>
+                    <button type="button" class="btn btn-outline-primary" id="monthlyBtn" onclick="updateTimeRange('monthly')">Monthly</button>
+                </div>
+            </div>
+            <!-- Detailed Fitness Chart -->
+            <canvas id="fitnessChart"></canvas>
         </div>
         
-        <!-- Fitness Chart -->
-        <canvas id="fitnessChart" class="mt-3"></canvas>
 
-        <!-- Additional Calorie Chart for better understanding -->
-        <canvas id="calorieChart" class="mt-3"></canvas>
     </div>
     
     
