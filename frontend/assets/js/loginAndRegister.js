@@ -33,12 +33,13 @@ function checkLoginStatus() {
 document.addEventListener("click", function (event) {
     if (event.target.id === "submitBtn") {
         event.preventDefault();
-
+        
         let passField = document.getElementById("passField");
         let verifyField = document.getElementById("verifyField");
 
         if (document.getElementById("registerForm")) { 
             if (passField && verifyField) {
+                verifyField.setCustomValidity("");
                 if (passField.value === verifyField.value) {
                     if(isFormValid("registerForm")){ 
                         let hasError = false;
@@ -46,7 +47,7 @@ document.addEventListener("click", function (event) {
                         $("#registerUsername, #registerEmail, #registerMobile").each(function () {
                             if ($(this).hasClass("input-error")) {
                                 hasError = true;
-                                return false; // Break the loop early if any error is found
+                                return false; 
                             }
                         });
 
@@ -160,7 +161,7 @@ function register() {
 
 $(document).ready(function () {
     let typingTimer; 
-    let doneTypingInterval = 500;
+    let doneTypingInterval = 250;
 
     function checkAvailability(field, value, fieldName) {
         $.ajax({

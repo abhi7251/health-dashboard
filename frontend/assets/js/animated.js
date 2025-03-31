@@ -57,7 +57,7 @@ function loadGLBModel(containerId, modelPath, scaleFactor = 1) {
             scene.add(model);
             camera.lookAt(model.position);
         },
-        (xhr) => console.log(`Loading: ${(xhr.loaded / xhr.total) * 100}%`),
+        (xhr) => {},
         (error) => console.error("Error loading model:", error)
     );
 
