@@ -33,6 +33,8 @@ function loadGLBModel(containerId, modelPath, scaleFactor = 1, brightness = 1) {
     controls.enableDamping = true;
     controls.dampingFactor = 0.05;
     controls.maxPolarAngle = Math.PI / 2;
+    controls.enableZoom = false; // Disable zooming
+    controls.enablePan = false;  // Disable translation (panning)
 
     let model;
     let rotationAngle = 0;
