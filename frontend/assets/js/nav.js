@@ -19,7 +19,11 @@ document.getElementById("aboutLink").addEventListener("click", function (event) 
 
 document.getElementById("activityLink").addEventListener("click", function (event) {
     event.preventDefault();
-    loadContent("dashboard.html");
+    loadContent("dashboard.html", function(){
+        createCharts();
+        showDetailChart();
+     
+    });
 });
 
 

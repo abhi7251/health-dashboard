@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
   
     <style>
-        .chart-container {
+       .chart-container {
             width: 20%;
             position: relative;
             display: flex;
@@ -23,17 +23,19 @@
             margin-bottom: 10px;
             cursor: pointer;
             transition: transform 0.2s ease;
+            padding: 10px; /* Ensures padding is there even in normal state */
+            box-sizing: border-box; /* Prevents border from affecting layout */
         }
 
         .chart-container:hover {
-            transform: scale(1.05);
+            transform: scale(1.1);
         }
 
         .chart-container.active {
-            border: 3px solid #007bff; /* Slightly thicker border */
+            border: 3px solid #007bff; /* Thicker border */
             border-radius: 12px;
             box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3); /* Adds a glowing effect */
-            transform: scale(1.05); /* Slight zoom effect */
+            background: white; /* Ensures content doesn't shift visually */
         }
 
         /* Optional: Add background gradient for active chart */
@@ -46,11 +48,13 @@
             height: 100%;
             background: rgba(0, 123, 255, 0.1); /* Light blue overlay */
             border-radius: inherit;
+            z-index: -1;
         }
+
 
         .chart-label {
             position: absolute;
-            top: 60%;
+            top: 70%;
             left: 50%;
             transform: translate(-50%, -50%);
             text-align: center;
@@ -98,7 +102,6 @@
         }
         canvas {
             width: 100%;
-            height: auto;
         }
         
         .charts-row {
@@ -112,6 +115,14 @@
             margin-bottom: 10px;
             font-weight: bold;
         }
+
+        #fitnessChart {
+            width: 100%;   /* Make the chart width 100% of its parent container */
+            height: 300px; /* Fixed height */
+            margin: 20px;
+            margin-bottom: 50px;
+        }
+
 
     </style>
 </head>
@@ -128,23 +139,26 @@
         
         
         <div class="charts-row p-3">
-            <div class="chart-container" onclick="showDetailChart('steps')">
+            <div class="chart-container" id ="stepsChartContainer" onclick="showDetailChart('steps')">
                 <canvas id="stepsChart"></canvas>
                 <div class="chart-label">
+                    <i class="fas fa-walking" style="font-size: 2rem; color:#555"></i>
                     <span class="chart-value">4,500</span>
                     <span class="chart-title">Steps</span>
                 </div>
             </div>
-            <div class="chart-container" onclick="showDetailChart('calories')">
+            <div class="chart-container" id ="caloriesChartContainer" onclick="showDetailChart('calories')">
                 <canvas id="caloriesChart"></canvas>
                 <div class="chart-label">
+                    <i class="fas fa-fire" style="font-size: 1.7rem; color:#555"></i>
                     <span class="chart-value">1,200</span>
                     <span class="chart-title">Calories</span>
                 </div>
             </div>
-            <div class="chart-container" onclick="showDetailChart('heartRate')">
+            <div class="chart-container" id ="heartRateChartContainer" onclick="showDetailChart('heartRate')">
                 <canvas id="heartRateChart"></canvas>
                 <div class="chart-label">
+                    <i class="fas fa-heart" style="font-size: 1.7rem; color:#555"></i>
                     <span class="chart-value">75</span>
                     <span class="chart-title">Heart Rate</span>
                 </div>
@@ -152,23 +166,26 @@
         </div>
         
         <div class="charts-row">
-            <div class="chart-container" onclick="showDetailChart('water')">
+            <div class="chart-container" id="waterChartContainer" onclick="showDetailChart('water')">
                 <canvas id="waterChart"></canvas>
                 <div class="chart-label">
+                    <i class="fas fa-tint" style="font-size: 1.7rem; color:#555"></i>
                     <span class="chart-value">1.5 L</span>
                     <span class="chart-title">Water</span>
                 </div>
             </div>
-            <div class="chart-container" onclick="showDetailChart('sleep')">
+            <div class="chart-container" id ="sleepChartContainer" onclick="showDetailChart('sleep')">
                 <canvas id="sleepChart"></canvas>
                 <div class="chart-label">
+                    <i class="fas fa-bed" style="font-size: 1.6rem; color:#555"></i>
                     <span class="chart-value">6 hrs</span>
                     <span class="chart-title">Sleep</span>
                 </div>
             </div>
-            <div class="chart-container" onclick="showDetailChart('weight')">
+            <div class="chart-container" id ="weightChartContainer" onclick="showDetailChart('weight')">
                 <canvas id="weightChart"></canvas>
                 <div class="chart-label">
+                    <i class="fas fa-weight" style="font-size: 1.6rem; color:#555"></i>
                     <span class="chart-value">70 kg</span>
                     <span class="chart-title">Weight</span>
                 </div>
