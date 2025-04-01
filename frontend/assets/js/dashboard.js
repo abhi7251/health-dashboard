@@ -1,22 +1,27 @@
 function createChart(chartId, value, maxValue, color) {
     const canvas = document.getElementById(chartId);
-   
+
     if (canvas) {
         const ctx = canvas.getContext('2d');
+
+        let remainingValue = maxValue - value; // Ensure value does not exceed maxValue
+        if(value > maxValue){
+            remainingValue = 0;
+        }
         new Chart(ctx, {
             type: 'doughnut',
             data: {
                 datasets: [{
-                    data: [value, maxValue - value],
+                    data: [value, remainingValue],
                     backgroundColor: [color, '#ddd'],
                     borderWidth: 0,
                 }]
             },
             options: {
                 responsive: true,
-                cutout: '85%',
-                rotation: -90,
-                circumference: 180,
+                cutout: '85%', // Inner cutout for the doughnut
+                rotation: -90, // Start from the top of the circle
+                circumference: 180, // Half doughnut
                 plugins: {
                     legend: { display: false },
                     tooltip: { enabled: true }
@@ -27,6 +32,7 @@ function createChart(chartId, value, maxValue, color) {
         console.error(`Canvas element with id '${chartId}' not found.`);
     }
 }
+
 
 function createDetailChart(canvasId, labels, data, barColor) {
     // Get the context of the canvas element
@@ -84,12 +90,12 @@ const titleMap = {
 };
 
 const chartData = {
-    steps: { value: 4500, maxValue: 10000, color: '#4caf50' },
+    steps: { value: 4500, maxValue: 8000, color: '#4caf50' },
     calories: { value: 1200, maxValue: 2500, color: '#ff9800' },
-    heartRate: { value: 75, maxValue: 200, color: '#f44336' },
+    heartRate: { value: 195, maxValue: 220, color: '#f44336' },
     water: { value: 1.5, maxValue: 3, color: '#2196f3' },
-    sleep: { value: 6, maxValue: 8, color: '#9c27b0' },
-    weight: { value: 70, maxValue: 100, color: '#795548' }
+    sleep: { value: 6, maxValue: 9, color: '#9c27b0' },
+    weight: { value: 70, maxValue: 120, color: '#795548' }
 };
 
 function createCharts() {
@@ -142,7 +148,6 @@ function updateTimeRange(range) {
     $('#fitnessChart').each(function () {
         Chart.getChart(this)?.destroy();
     });
-    console.log(`Creating graph: ${currentMetric}`);
     createDetailChart(
         'fitnessChart',                // ID of the canvas element
         ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],  // X-axis labels
