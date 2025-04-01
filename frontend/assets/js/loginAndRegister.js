@@ -21,7 +21,7 @@ function checkLoginStatus() {
                 loginButton.removeEventListener("click", loginHandler);
                 loginButton.addEventListener("click", logout);
             } else {
-                loginButton.innerHTML = "Login";
+                loginButton.innerHTML = "Login / Register";
                 loginButton.removeEventListener("click", logout);
                 loginButton.addEventListener("click", loginHandler);
             }
