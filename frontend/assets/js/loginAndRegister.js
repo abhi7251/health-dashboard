@@ -161,7 +161,7 @@ function register() {
 
 $(document).ready(function () {
     let typingTimer; 
-    let doneTypingInterval = 250;
+    let doneTypingInterval = 500;
 
     function checkAvailability(field, value, fieldName) {
         $.ajax({

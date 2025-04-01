@@ -12,7 +12,9 @@ for (var i = 0; i < elements.length; i++) {
 // Handle other navigation links
 document.getElementById("aboutLink").addEventListener("click", function (event) {
     event.preventDefault();
-    loadContent("about.html");
+    loadContent("about.html", function () {
+        loadGLBModel("man", "assets/img/heart.glb", 1.5);
+    });
 });
 
 document.getElementById("activityLink").addEventListener("click", function (event) {

@@ -1,5 +1,5 @@
-loadGLBModel("watch", "assets/img/watch.glb", 1);
-function loadContent(page) {
+loadGLBModel("watch", "assets/img/watch.glb", 1.5);
+function loadContent(page, callback=null) {
     document.getElementById("content").innerHTML = "<p>Loading...</p>";
 
     fetch(page)
@@ -11,7 +11,7 @@ function loadContent(page) {
                 const doc = parser.parseFromString(data, "text/html");
                 const content = doc.getElementById("content");
                 document.getElementById("content").innerHTML = content.innerHTML;
-                loadGLBModel("watch", "assets/img/watch.glb", 1);
+                loadGLBModel("watch", "assets/img/watch.glb", 1.5);
                 setActiveLinkById("homeLink");
             } else {
                 if (page === "about.html") { 
@@ -28,6 +28,9 @@ function loadContent(page) {
                 toggle: false
             });
             bsCollapse.hide();
+            if (callback) {
+                callback();
+            }
         })
         .catch(error => {
             document.getElementById("content").innerHTML = "<p>Error loading page.</p>";

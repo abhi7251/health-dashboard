@@ -9,6 +9,10 @@ function loadGLBModel(containerId, modelPath, scaleFactor = 1) {
     const scene = new THREE.Scene();
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
     renderer.setSize(container.clientWidth, container.clientHeight);
+    renderer.outputEncoding = THREE.sRGBEncoding;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     container.appendChild(renderer.domElement);
 
     const camera = new THREE.PerspectiveCamera(
@@ -17,10 +21,9 @@ function loadGLBModel(containerId, modelPath, scaleFactor = 1) {
         0.1,
         1000
     );
-    camera.position.set(0, 2, 5);
-
-    // Add lighting
-    const ambientLight = new THREE.AmbientLight(0xffffff, 1.5);
+  
+    // Lighting setup
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
     const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
     directionalLight.position.set(5, 5, 5);
     scene.add(ambientLight, directionalLight);
@@ -29,48 +32,52 @@ function loadGLBModel(containerId, modelPath, scaleFactor = 1) {
     const controls = new THREE.OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.dampingFactor = 0.05;
-    controls.screenSpacePanning = false;
     controls.maxPolarAngle = Math.PI / 2;
-    controls.enableRotate = true;
 
     let model;
-    const rotationSpeed = 0.002;
+    let rotationAngle = 0;
+    let rotationDirection = 1;
+    const maxRotation = Math.PI / 4;
+    const rotationSpeed = 0.01;
     let isMouseOver = false;
 
     // Load the GLB model
-    const loader = new THREE.GLTFLoader();
-    loader.load(
+    new THREE.GLTFLoader().load(
         modelPath,
         (gltf) => {
             model = gltf.scene;
-
-            // Compute the bounding box of the model
+    
+            // Compute bounding box
             const bbox = new THREE.Box3().setFromObject(model);
             const center = bbox.getCenter(new THREE.Vector3());
-
-            // Reposition the model to center it
+            const size = bbox.getSize(new THREE.Vector3());
+    
+            // Center the model
             model.position.sub(center);
-
-            // Apply the user-defined scale factor
-            model.scale.multiplyScalar(scaleFactor);
-
+    
+    
+            camera.position.set(0, 0, (1/scaleFactor) * 5);
+            camera.lookAt(center);
+      
+    
             scene.add(model);
-            camera.lookAt(model.position);
         },
-        (xhr) => {},
+        null,
         (error) => console.error("Error loading model:", error)
     );
-
-    // Handle mouse enter/leave events
-    container.addEventListener("mouseenter", () => isMouseOver = true);
-    container.addEventListener("mouseleave", () => isMouseOver = false);
+    
+    // Handle mouse events
+    container.addEventListener("mouseenter", () => (isMouseOver = true));
+    container.addEventListener("mouseleave", () => (isMouseOver = false));
 
     // Animation loop
     function animate() {
         requestAnimationFrame(animate);
         controls.update();
         if (model && !isMouseOver) {
-            model.rotation.y += rotationSpeed;
+            rotationAngle += rotationSpeed * rotationDirection;
+            if (Math.abs(rotationAngle) >= maxRotation) rotationDirection *= -1;
+            model.rotation.y = rotationAngle;
         }
         renderer.render(scene, camera);
     }
