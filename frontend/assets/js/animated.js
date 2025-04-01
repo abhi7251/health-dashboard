@@ -1,4 +1,4 @@
-function loadGLBModel(containerId, modelPath, scaleFactor = 1) {
+function loadGLBModel(containerId, modelPath, scaleFactor = 1, brightness = 1) {
     const container = document.getElementById(containerId);
     if (!container) {
         console.error("Container not found:", containerId);
@@ -23,8 +23,8 @@ function loadGLBModel(containerId, modelPath, scaleFactor = 1) {
     );
   
     // Lighting setup
-    const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6*brightness);
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.6*brightness);
     directionalLight.position.set(5, 5, 5);
     scene.add(ambientLight, directionalLight);
 

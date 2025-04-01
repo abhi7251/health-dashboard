@@ -160,7 +160,7 @@ function register() {
 
 
 $(document).ready(function () {
-    let typingTimer; 
+    let typingTimer;
     let doneTypingInterval = 500;
 
     function checkAvailability(field, value, fieldName) {
@@ -172,7 +172,7 @@ $(document).ready(function () {
             success: function (response) {
                 let error = $("#" + fieldName + "Error");
                 let inputField = $("#" + fieldName);
-                
+
                 if (response.status === "taken") {
                     error.text(response.message).show();
                     inputField.addClass("input-error");
@@ -184,24 +184,27 @@ $(document).ready(function () {
         });
     }
 
-    // Use event delegation for delayed binding
-    $(document).on("input", "#registerUsername, #registerEmail, #registerMobile", function () {
-        let fieldName = $(this).attr("id");
-        let value = $(this).val().trim();
-        let error = $("#" + fieldName + "Error");
-        let inputField = $("#" + fieldName);
+    function validateAllFields() {
+        $("#registerUsername, #registerEmail, #registerMobile").each(function () {
+            let fieldName = $(this).attr("id");
+            let value = $(this).val().trim();
 
-        let field = fieldName.replace("register", "").toLowerCase(); 
-        clearTimeout(typingTimer);
-        
-
-        if (value.length > 0) {
-            typingTimer = setTimeout(() => {
+            if (value.length > 0) {
+                let field = fieldName.replace("register", "").toLowerCase();
                 checkAvailability(field, value, fieldName);
-            }, doneTypingInterval);
-        } else {
-            error.text("").hide();
-            inputField.removeClass("input-error");
-        }
+            }
+        });
+    }
+
+    // ✅ **Handle manual input & change events**
+    $(document).on("input change", "#registerUsername, #registerEmail, #registerMobile", function () {
+        clearTimeout(typingTimer);
+        typingTimer = setTimeout(validateAllFields, doneTypingInterval);
     });
+
+    // ✅ **Fix autofill issue with interval check**
+    setInterval(() => {
+        validateAllFields();  // Runs every second to check for autofilled values
+    }, 1000);
 });
+

@@ -13,7 +13,7 @@ for (var i = 0; i < elements.length; i++) {
 document.getElementById("aboutLink").addEventListener("click", function (event) {
     event.preventDefault();
     loadContent("about.html", function () {
-        loadGLBModel("man", "assets/img/heart.glb", 1.5);
+        loadGLBModel("man", "assets/img/heart.glb", 1.5, 3);
     });
 });
 

@@ -1,4 +1,4 @@
-loadGLBModel("watch", "assets/img/watch.glb", 1.5);
+loadGLBModel("watch", "assets/img/watch.glb", 1);
 function loadContent(page, callback=null) {
     document.getElementById("content").innerHTML = "<p>Loading...</p>";
 
@@ -11,7 +11,7 @@ function loadContent(page, callback=null) {
                 const doc = parser.parseFromString(data, "text/html");
                 const content = doc.getElementById("content");
                 document.getElementById("content").innerHTML = content.innerHTML;
-                loadGLBModel("watch", "assets/img/watch.glb", 1.5);
+                loadGLBModel("watch", "assets/img/watch.glb", 1);
                 setActiveLinkById("homeLink");
             } else {
                 if (page === "about.html") { 
