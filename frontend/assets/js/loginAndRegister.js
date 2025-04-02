@@ -10,6 +10,7 @@ document.addEventListener("click", function (event) {
 });
 
 
+
 // Function to check login status and update button
 function checkLoginStatus() {
     fetch("../backend/session_status.php")
@@ -40,6 +41,7 @@ document.addEventListener("click", function (event) {
         if (document.getElementById("registerForm")) { 
             if (passField && verifyField) {
                 verifyField.setCustomValidity("");
+                verifyField.reportValidity();
                 if (passField.value === verifyField.value) {
                     if(isFormValid("registerForm")){ 
                         let hasError = false;
@@ -161,7 +163,7 @@ function register() {
 
 $(document).ready(function () {
     let typingTimer;
-    let doneTypingInterval = 500;
+    let doneTypingInterval = 1000;
 
     function checkAvailability(field, value, fieldName) {
         $.ajax({
@@ -196,13 +198,13 @@ $(document).ready(function () {
         });
     }
 
-    // ✅ **Handle manual input & change events**
+    // **Handle manual input & change events**
     $(document).on("input change", "#registerUsername, #registerEmail, #registerMobile", function () {
         clearTimeout(typingTimer);
         typingTimer = setTimeout(validateAllFields, doneTypingInterval);
     });
 
-    // ✅ **Fix autofill issue with interval check**
+    // **Fix autofill issue with interval check**
     setInterval(() => {
         validateAllFields();  // Runs every second to check for autofilled values
     }, 1000);

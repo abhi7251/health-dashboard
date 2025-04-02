@@ -1,4 +1,5 @@
 loadGLBModel("watch", "assets/img/watch.glb", 1);
+
 function loadContent(page, callback=null) {
     document.getElementById("content").innerHTML = "<p>Loading...</p>";
 
@@ -38,56 +39,47 @@ function loadContent(page, callback=null) {
         });
 }
 
+document.addEventListener('DOMContentLoaded', function () {
+	(function () {
+		if (!('requestAnimationFrame' in window)) return;
 
+		var backgrounds = [];
+		var parallaxBackgrounds = document.querySelectorAll('[data-bss-scroll-zoom]');
 
-function setActiveLinkById(linkId) {
-    $(".nav-item a").removeClass("active"); // Remove 'active' from all links
-    $("#" + linkId).addClass("active"); // Add 'active' to the selected link
-}
+		for (var el of parallaxBackgrounds) {
+			var bg = document.createElement('div');
 
-// Toggle password visibility on mousedown
-document.addEventListener("mousedown", function (event) {
-    let togglePass = event.target.closest("#togglePass");
-    if (togglePass) {
-        let passwordField = document.getElementById("passField");
-        if (passwordField) {
-            passwordField.type = "text"; // Show password
-        }
-    }
-});
+			bg.style.backgroundImage = el.style.backgroundImage;
+			bg.style.backgroundSize = 'cover';
+			bg.style.backgroundPosition = 'center';
+			bg.style.position = 'absolute';
+			bg.style.height = '100%';
+			bg.style.width = '100%';
+			bg.style.top = 0;
+			bg.style.left = 0;
+			bg.style.zIndex = -100;
 
-// Hide password again on mouseup
-document.addEventListener("mouseup", function (event) {
-    let togglePass = event.target.closest("#togglePass");
-    if (togglePass) {
-        let passwordField = document.getElementById("passField");
-        if (passwordField) {
-            passwordField.type = "password"; // Hide password
-        }
-    }
-});
+			el.appendChild(bg);
+			backgrounds.push({ element: bg, speed: parseFloat(el.getAttribute('data-bss-scroll-zoom-speed')) || 1 });
 
-// Mobile Support
-document.addEventListener("touchstart", function (event) {
-    if (event.target.closest("#togglePass")) {
-        togglePasswordVisibility(true);
-    }
-});
+			el.style.position = 'relative';
+			el.style.background = 'transparent';
+			el.style.overflow = 'hidden';
+		}
 
-document.addEventListener("touchend", function (event) {
-    if (event.target.closest("#togglePass")) {
-        togglePasswordVisibility(false);
-    }
-});
+		function updateParallax() {
+			var scrollTop = window.pageYOffset;
 
+			for (var bg of backgrounds) {
+				var rect = bg.element.parentElement.getBoundingClientRect();
+				var offset = (scrollTop - rect.top) * bg.speed;
+				bg.element.style.transform = `translateY(${offset}px)`;
+			}
 
-$(document).ready(function () {
-    $(document).on("keypress", function (event) {
-        if (event.which === 13) { // Check if Enter key is pressed
-            let button = $("#submitBtn");
-            if (button.length) { // Ensure button exists
-                button.click();
-            }
-        }
-    });
-});
+			requestAnimationFrame(updateParallax);
+		}
+
+		requestAnimationFrame(updateParallax);
+	})();
+}, false);
+
