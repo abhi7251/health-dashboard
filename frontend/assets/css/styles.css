@@ -71,5 +71,18 @@
 }
 
 
+@media (max-width: 576px) {
+  .responsive-margin { margin: 10px; }
+}
+@media (min-width: 577px) and (max-width: 768px) {
+  .responsive-margin { margin: 20px; }
+}
+@media (min-width: 769px) and (max-width: 992px) {
+  .responsive-margin { margin: 30px; }
+}
+@media (min-width: 993px) {
+  .responsive-margin { margin: 40px; }
+}
+
 
 
