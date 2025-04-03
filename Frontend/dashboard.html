@@ -1,86 +1,85 @@
 <!DOCTYPE html>
 <html data-bs-theme="light" lang="en">
 <head>
-
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>Health Dashboard</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="assets/css/Banner-Heading-Image-images.css">
-    <link rel="stylesheet" href="assets/css/Navbar-With-Button-icons.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-    <link rel="stylesheet" href="assets/css/dashboard.css">
-
-  
     
+    <!-- Bootstrap & Font Awesome -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="assets/css/dashboard.css">
+    
+    <!-- Defer script loading for better performance -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
+    <script src="assets/js/bs-init.js" defer></script>
 </head>
 <body class="animate__animated animate__fadeIn">
-    <!-- ...existing code... -->
-
-    <div class="container mt-4 " id="dashboard">
+    <div class="container mt-4" id="dashboard">
         <div class="position-relative mb-3">
-            <h2 class="text-center" style="font-weight: bolder;">Activity Dashboard</h2>
-            <button class="btn btn-primary btn-sm position-absolute top-0 end-0" onclick="syncData()">
+            <h2 class="text-center fw-bold">Activity Dashboard</h2>
+            <button class="btn btn-primary btn-sm position-absolute top-0 end-0" onclick="syncData()" aria-label="Sync Data">
                 <i class="fas fa-sync-alt"></i> Sync Data
             </button>
         </div>
-        
-        
+
         <div class="charts-row p-3">
-            <div class="chart-container" id ="stepsChartContainer" onclick="showDetailChart('steps')">
+            <div class="chart-container" id="stepsChartContainer" onclick="showDetailChart('steps')">
                 <canvas id="stepsChart"></canvas>
                 <div class="chart-label">
-                    <i class="fas fa-walking" style="font-size: 2rem; color:#555"></i>
+                    <i class="fas fa-walking chart-icon"></i>
                     <span class="chart-value">4,500</span>
                     <span class="chart-title">Steps</span>
                 </div>
             </div>
-            <div class="chart-container" id ="caloriesChartContainer" onclick="showDetailChart('calories')">
+            <div class="chart-container" id="caloriesChartContainer" onclick="showDetailChart('calories')">
                 <canvas id="caloriesChart"></canvas>
                 <div class="chart-label">
-                    <i class="fas fa-fire" style="font-size: 1.7rem; color:#555"></i>
+                    <i class="fas fa-fire chart-icon"></i>
                     <span class="chart-value">1,200</span>
                     <span class="chart-title">Calories</span>
                 </div>
             </div>
-            <div class="chart-container" id ="heartRateChartContainer" onclick="showDetailChart('heartRate')">
+            <div class="chart-container" id="heartRateChartContainer" onclick="showDetailChart('heartRate')">
                 <canvas id="heartRateChart"></canvas>
                 <div class="chart-label">
-                    <i class="fas fa-heart" style="font-size: 1.7rem; color:#555"></i>
+                    <i class="fas fa-heart chart-icon"></i>
                     <span class="chart-value">75</span>
                     <span class="chart-title">Heart Rate</span>
                 </div>
             </div>
         </div>
-        
+
         <div class="charts-row">
             <div class="chart-container" id="waterChartContainer" onclick="showDetailChart('water')">
                 <canvas id="waterChart"></canvas>
                 <div class="chart-label">
-                    <i class="fas fa-tint" style="font-size: 1.7rem; color:#555"></i>
+                    <i class="fas fa-tint chart-icon"></i>
                     <span class="chart-value">1.5 L</span>
                     <span class="chart-title">Water</span>
                 </div>
             </div>
-            <div class="chart-container" id ="sleepChartContainer" onclick="showDetailChart('sleep')">
+            <div class="chart-container" id="sleepChartContainer" onclick="showDetailChart('sleep')">
                 <canvas id="sleepChart"></canvas>
                 <div class="chart-label">
-                    <i class="fas fa-bed" style="font-size: 1.6rem; color:#555"></i>
+                    <i class="fas fa-bed chart-icon"></i>
                     <span class="chart-value">6 hrs</span>
                     <span class="chart-title">Sleep</span>
                 </div>
             </div>
-            <div class="chart-container" id ="weightChartContainer" onclick="showDetailChart('weight')">
+            <div class="chart-container" id="weightChartContainer" onclick="showDetailChart('weight')">
                 <canvas id="weightChart"></canvas>
                 <div class="chart-label">
-                    <i class="fas fa-weight" style="font-size: 1.6rem; color:#555"></i>
+                    <i class="fas fa-weight chart-icon"></i>
                     <span class="chart-value">70 kg</span>
                     <span class="chart-title">Weight</span>
                 </div>
             </div>
         </div>
-        
+
         <div class="detail-chart-container mt-5 mx-auto" style="max-width: 800px;">
             <h4 id="detailChartTitle" class="detail-chart-title text-center mt-4">Steps History</h4>
             <div class="d-flex justify-content-center mb-3">
@@ -89,16 +88,8 @@
                     <button type="button" class="btn btn-outline-primary" id="monthlyBtn" onclick="updateTimeRange('monthly')">Monthly</button>
                 </div>
             </div>
-            <!-- Detailed Fitness Chart -->
             <canvas id="fitnessChart"></canvas>
         </div>
-        
-
     </div>
-    
-    
 </body>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="assets/js/bs-init.js?h=4777463a3dc87e6b53aab58f966705fb"></script>
 </html>
