@@ -19,46 +19,39 @@ function showAlert(message, type = "success", timeout = 3000) {
     }, timeout);
 }
 
-function togglePasswordVisibility(isVisible, icon) {
-    if(icon){
-        let passwordField = document.getElementById("passField");
-        if(isVisible){
-            if (passwordField) {
-                passwordField.type = "text"; // Show password
-                icon.classList.toggle("fa-eye");
-                icon.classList.toggle("fa-eye-slash");
-            }
-        }
-        else{
-            if (passwordField) {
-                passwordField.type = "password"; // hide password
-                icon.classList.toggle("fa-eye-slash");
-                icon.classList.toggle("fa-eye");
-            }
-        }
 
+function togglePasswordVisibility(isVisible, icon) {
+    if (icon) {
+        let passwordField = document.getElementById("passField");
+        if (passwordField) {
+            passwordField.type = isVisible ? "text" : "password";
+            icon.classList.toggle("fa-eye", isVisible);
+            icon.classList.toggle("fa-eye-slash", !isVisible);
+        }
     }
 }
 
-// Toggle password visibility on mousedown
+// Show password on press (mouse or touch)
 ["mousedown", "touchstart"].forEach(eventType => {
     document.addEventListener(eventType, function (event) {
-        let icon = event.target.closest("#togglePass");
-        togglePasswordVisibility(true, icon);
+        const button = event.target.closest("#toggleBtn");
+        if (button) {
+            const icon = button.querySelector("#togglePass");
+            togglePasswordVisibility(true, icon);
+        }
     });
 });
 
-
-// Hide password again on mouseup
-["mouseup", "touchend"].forEach(eventType => {
+// Hide password on release or mouse leaving
+["mouseup", "touchend", "mouseleave"].forEach(eventType => {
     document.addEventListener(eventType, function (event) {
-        let icon = event.target.closest("#togglePass");
-        togglePasswordVisibility(false, icon);
+        const button = event.target.closest("#toggleBtn");
+        if (button) {
+            const icon = button.querySelector("#togglePass");
+            togglePasswordVisibility(false, icon);
+        }
     });
 });
-
-
-
 
 
 $(document).ready(function () {

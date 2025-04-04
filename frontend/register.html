@@ -73,20 +73,17 @@
                       id="passField"
                       name="password"
                       autocomplete="off"
-                      required="yes"
-                      pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&amp;])[A-Za-z\d@$!%*?&amp;]{8,}"
+                      required
+                      pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}"
                       minlength="8"
                       maxlength="20"
                       title="Must contain at least one uppercase letter, one lowercase letter, one number, one special character, and be at least 8 characters long."
-                      autofocus="yes"
-                    /><button class="btn border rounded" type="button">
-                      <i class="fas fa-eye-slash" 
-                      width="1em"
-                      height="1em"
-                      class="bi bi-eye"
-                      id="togglePass"></i>
+                      autofocus
+                    />
+                    <button class="btn border rounded" type="button" id="toggleBtn">
+                      <i class="fas fa-eye-slash" id="togglePass"></i>
                     </button>
-                  </div>
+                  </div>                  
                 </div>
                 <div class="col-sm-6">
                   <input
