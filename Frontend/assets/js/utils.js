@@ -42,8 +42,8 @@ function togglePasswordVisibility(isVisible, icon) {
     });
 });
 
-// Hide password on release or mouse leaving
-["mouseup", "touchend", "mouseleave"].forEach(eventType => {
+
+["mouseup", "touchend"].forEach(eventType => {
     document.addEventListener(eventType, function (event) {
         const button = event.target.closest("#toggleBtn");
         if (button) {
