@@ -49,7 +49,6 @@ document.addEventListener("click", function (event) {
                         $("#registerUsername, #registerEmail, #registerMobile").each(function () {
                             if ($(this).hasClass("input-error")) {
                                 hasError = true;
-                                return false; 
                             }
                         });
 

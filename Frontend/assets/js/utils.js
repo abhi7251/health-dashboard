@@ -19,42 +19,46 @@ function showAlert(message, type = "success", timeout = 3000) {
     }, timeout);
 }
 
-// Hide password again on mouseup
-document.addEventListener("mouseup", function (event) {
-    let togglePass = event.target.closest("#togglePass");
-    if (togglePass) {
+function togglePasswordVisibility(isVisible, icon) {
+    if(icon){
         let passwordField = document.getElementById("passField");
-        if (passwordField) {
-            passwordField.type = "password"; // Hide password
+        if(isVisible){
+            if (passwordField) {
+                passwordField.type = "text"; // Show password
+                icon.classList.toggle("fa-eye");
+                icon.classList.toggle("fa-eye-slash");
+            }
         }
-    }
-});
+        else{
+            if (passwordField) {
+                passwordField.type = "password"; // hide password
+                icon.classList.toggle("fa-eye-slash");
+                icon.classList.toggle("fa-eye");
+            }
+        }
 
+    }
+}
 
 // Toggle password visibility on mousedown
-document.addEventListener("mousedown", function (event) {
-    let togglePass = event.target.closest("#togglePass");
-    if (togglePass) {
-        let passwordField = document.getElementById("passField");
-        if (passwordField) {
-            passwordField.type = "text"; // Show password
-        }
-    }
+["mousedown", "touchstart"].forEach(eventType => {
+    document.addEventListener(eventType, function (event) {
+        let icon = event.target.closest("#togglePass");
+        togglePasswordVisibility(true, icon);
+    });
 });
 
 
-// Mobile Support
-document.addEventListener("touchstart", function (event) {
-    if (event.target.closest("#togglePass")) {
-        togglePasswordVisibility(true);
-    }
+// Hide password again on mouseup
+["mouseup", "touchend"].forEach(eventType => {
+    document.addEventListener(eventType, function (event) {
+        let icon = event.target.closest("#togglePass");
+        togglePasswordVisibility(false, icon);
+    });
 });
 
-document.addEventListener("touchend", function (event) {
-    if (event.target.closest("#togglePass")) {
-        togglePasswordVisibility(false);
-    }
-});
+
+
 
 
 $(document).ready(function () {
