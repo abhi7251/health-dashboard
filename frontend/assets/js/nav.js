@@ -8,7 +8,7 @@ var elements = document.getElementsByClassName("homeLink");
 for (var i = 0; i < elements.length; i++) {
     elements[i].addEventListener("click", function (event) {
         event.preventDefault();
-        loadContent("index.html");
+        loadContent("index.php");
     });
 }
 
@@ -16,7 +16,7 @@ for (var i = 0; i < elements.length; i++) {
 document.getElementById("aboutLink").addEventListener("click", function (event) {
     event.preventDefault();
     loadContent("about.html", function () {
-        loadGLBModel("man", "assets/img/heart.glb", 1.5, 3);
+       
     });
 });
 

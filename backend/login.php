@@ -1,5 +1,4 @@
 <?php
-session_start();
 require '../config.php';
 
 header('Content-Type: application/json'); // JSON response
@@ -20,13 +19,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     
 
-    $conn = new mysqli($host, $db_user, $db_pass, $dbname);
-
-    if ($conn->connect_error) {
-        echo json_encode(['status' => 'error', 'message' => 'Connection failed: ' . $conn->connect_error]);
-        exit();
-    }
-
     $stmt = $conn->prepare("SELECT password FROM users WHERE username = ?");
     if (!$stmt) {
         echo json_encode(['status' => 'error', 'message' => 'Query failed: ' . $conn->error]);
@@ -46,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (password_verify($password, $row['password'])) {
         $_SESSION['username'] = $username;
-        echo json_encode(['status' => 'success', 'message' => 'Login successful. Welcome, ' . htmlspecialchars($username) . '!', 'redirect' => 'index.html']);
+        echo json_encode(['status' => 'success', 'message' => 'Login successful. Welcome, ' . htmlspecialchars($username) . '!', 'redirect' => 'index.php']);
         exit(); 
     } else {
         echo json_encode(['status' => 'error', 'message' => 'Invalid username or password.']);
@@ -54,6 +46,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     $stmt->close();
-    $conn->close();
+
 }
 ?>

@@ -1,5 +1,9 @@
 <?php
-header('Content-Type: application/json');
+
+if (session_status() === PHP_SESSION_NONE) {
+    session_set_cookie_params(604800, "/");
+}
+session_start();
 
 $host = 'localhost';
 $db_user = 'root';
@@ -42,8 +46,6 @@ if (!$conn->query($tableSql)) {
     echo json_encode(['status' => 'error', 'message' => 'Error creating table: ' . $conn->error]);
     exit();
 }
-
-$conn->close();
 
 
 ?>

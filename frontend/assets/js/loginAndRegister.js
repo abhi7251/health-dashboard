@@ -17,18 +17,24 @@ function checkLoginStatus() {
         .then(response => response.json())
         .then(data => {
             const loginButton = document.getElementById("loginLink");
+            const linkButton = document.getElementById("linkLink");
+
             if (data.logged_in) {
                 loginButton.innerHTML = "Logout";
+                linkButton.style.display = "inline-block";
                 loginButton.removeEventListener("click", loginHandler);
                 loginButton.addEventListener("click", logout);
             } else {
                 loginButton.innerHTML = "Login / Register";
+                linkButton.style.display = "none";
                 loginButton.removeEventListener("click", logout);
                 loginButton.addEventListener("click", loginHandler);
             }
         })
         .catch(error => console.error("Error checking session:", error));
 }
+
+
 
 // Handle login & registration submit
 document.addEventListener("click", function (event) {

@@ -1,7 +1,6 @@
 <?php
 require '../config.php';
 
-
 // Ensure response is JSON
 header('Content-Type: application/json');
 
@@ -34,15 +33,6 @@ if (empty($name) || empty($username) || empty($email) || empty($password)) {
     exit;
 }
 
-// Connect to database
-$conn = new mysqli($host, $db_user, $db_pass, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    $response["message"] = "Database connection failed: " . $conn->connect_error;
-    echo json_encode($response);
-    exit;
-}
 
 // Check if username, email, or mobile exists
 $stmt = $conn->prepare("SELECT 1 FROM users WHERE username = ? OR email = ? OR mobile = ?");
@@ -85,7 +75,7 @@ if ($stmt->execute()) {
 }
 
 $stmt->close();
-$conn->close();
+
 
 echo json_encode($response);
 exit;

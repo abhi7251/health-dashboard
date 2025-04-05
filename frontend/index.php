@@ -1,5 +1,9 @@
+<?php
+require '../config.php';
+?>
 <!DOCTYPE html>
 <html data-bs-theme="light" lang="en">
+
 
 <head>
     <meta charset="utf-8">
@@ -26,6 +30,8 @@
             <a class="navbar-brand d-flex align-items-center homeLink" href="#">
                 <img src="assets/img/logo.png" alt="Health Tracker Logo" style="height: 50px; margin-right: 10px;"> 
                 <h3 class="mb-0">Health Tracker</h3>
+               
+
             </a>
         </div>
 
@@ -49,12 +55,14 @@
                         style="color: white; background: var(--bs-dark); border-style: none; border-radius: 12px; padding: 6px 12px;">
                     Login / Register
                 </button>
-                
-                <a href="https://www.fitbit.com/oauth2/authorize?response_type=code&amp;client_id=23QBW3&amp;scope=activity+cardio_fitness+electrocardiogram+heartrate+irregular_rhythm_notifications+location+nutrition+oxygen_saturation+profile+respiratory_rate+settings+sleep+social+temperature+weight&amp;redirect_uri=http%3A%2F%2Flocalhost%2Fhealth_dashboard%2Ffrontend%2F" target="_parent">
-                    <button class="btn btn-primary" type="button" style="color: var(--bs-black); background: var(--bs-warning);">
-                        Link <i class="fa fa-arrow-right ps-0 ms-2" style="font-size: 20px;"></i>
-                    </button>
+
+                <a href="https://www.fitbit.com/oauth2/authorize?response_type=code&amp;client_id=23QBW3&amp;scope=activity+cardio_fitness+electrocardiogram+heartrate+irregular_rhythm_notifications+location+nutrition+oxygen_saturation+profile+respiratory_rate+settings+sleep+social+temperature+weight&amp;redirect_uri=http%3A%2F%2Flocalhost%2Fhealth_dashboard%2Ffrontend%2F" target="_parent" id="linkLink" style="display: none;">
+                        <button class="btn btn-primary" type="button" style="color: var(--bs-black); background: var(--bs-warning);">
+                            Link <i class="fa fa-arrow-right ps-0 ms-2" style="font-size: 20px;"></i>
+                        </button>
                 </a>
+
+
             </div>
         </div>
     </div>
@@ -175,7 +183,7 @@
             </div>
         </div>
         
-        <footer class="text-center bg-dark">
+        <footer class="text-center bg-dark" id="footer">
             <div class="container text-white py-4 py-lg-5" style="height: 140px;">
                 <ul class="list-inline">
                     <li class="list-inline-item me-4"><a href="https://www.linkedin.com/in/raj-jaiswal-69a86b204/" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-linkedin text-light" style="font-size: 26px;">

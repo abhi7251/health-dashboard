@@ -1,11 +1,11 @@
 <?php
-session_start();
+require '../config.php';
+header('Content-Type: application/json');
 
 $response = array(
     "logged_in" => isset($_SESSION['username']) ? true : false
 );
 
-header('Content-Type: application/json');
 echo json_encode($response);
 exit;
 ?>

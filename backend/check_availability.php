@@ -4,13 +4,6 @@ require '../config.php';
 header('Content-Type: application/json'); 
 
 
-$conn = new mysqli($host, $db_user, $db_pass, $dbname);
-
-if ($conn->connect_error) {
-    echo json_encode(["status" => "error", "message" => "Database connection failed"]);
-    exit;
-}
-
 // Define allowed fields
 $allowed_fields = ["username", "email", "mobile"];
 $field = "";
@@ -52,5 +45,5 @@ if ($field && $value) {
 else {
     echo json_encode(["status" => "error", "message" => "No valid field provided"]);
 }
-$conn->close();
+
 ?>

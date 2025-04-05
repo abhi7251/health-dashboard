@@ -1,6 +1,5 @@
 <?php
-session_start();
-
+require_once '../config.php'; 
 if (isset($_SESSION['username'])) {
     // If the user is logged in, destroy session
     session_unset();
