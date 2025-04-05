@@ -1,45 +1,55 @@
 loadGLBModel("watch", "assets/img/watch.glb", 1);
 
-function loadContent(page, callback=null) {
-    document.getElementById("content").innerHTML = '<div class="loader"></div>';
-    //hide footer
-    document.getElementById("footer").style.visibility = "hidden";
- 
+function loadContent(page, callback = null) {
+    const contentDiv = document.getElementById("content");
+    const footer = document.getElementById("footer");
+
+    // Show loader
+    contentDiv.innerHTML = '<div class="loader"></div>';
+    footer.style.visibility = "hidden";
+
+    // Collapse the navbar
+    let navbar = document.getElementById("navcol-1");
+    let bsCollapse = new bootstrap.Collapse(navbar, {
+        toggle: false
+    });
+    bsCollapse.hide();
+    
+    // Start a timer
+    const startTime = Date.now();
+
     fetch(page)
         .then(response => response.text())
         .then(data => {
-            if (page === "index.php") {
-                // Extract only the content div
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(data, "text/html");
-                const content = doc.getElementById("content");
-                document.getElementById("content").innerHTML = content.innerHTML;
-                loadGLBModel("watch", "assets/img/watch.glb", 1);
-                setActiveLinkById("homeLink");
-            } else {
-                if (page === "about.html") { 
-                    setActiveLinkById("aboutLink");
-                } else if (page === "dashboard.html") { 
-                    setActiveLinkById("activityLink");
-                }
-                document.getElementById("content").innerHTML = data;
-            }
+            const elapsed = Date.now() - startTime;
+            const delay = Math.max(250 - elapsed, 0); 
 
-            // Collapse the navbar after clicking a link
-            let navbar = document.getElementById("navcol-1");
-            let bsCollapse = new bootstrap.Collapse(navbar, {
-                toggle: false
-            });
-            bsCollapse.hide();
-            if (callback) {
-                callback();
-            }
-            document.getElementById("footer").style.visibility = "visible";
+            setTimeout(() => {
+                if (page === "index.php") {
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(data, "text/html");
+                    const content = doc.getElementById("content");
+                    contentDiv.innerHTML = content.innerHTML;
+                    loadGLBModel("watch", "assets/img/watch.glb", 1);
+                    setActiveLinkById("homeLink");
+                } else {
+                    if (page === "about.html") { 
+                        setActiveLinkById("aboutLink");
+                    } else if (page === "dashboard.html") { 
+                        setActiveLinkById("activityLink");
+                    }
+                    contentDiv.innerHTML = data;
+                }
+
+                
+
+                // Callback and footer
+                if (callback) callback();
+                footer.style.visibility = "visible";
+            }, delay);
         })
         .catch(error => {
-            document.getElementById("content").innerHTML = "<p>Error loading page.</p>";
             console.error("Error:", error);
         });
 }
-
 
