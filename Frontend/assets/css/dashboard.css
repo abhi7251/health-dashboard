@@ -1,0 +1,108 @@
+.chart-container {
+    width: 20%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    padding: 10px; /* Ensures padding is there even in normal state */
+    box-sizing: border-box; /* Prevents border from affecting layout */
+}
+
+.chart-container:hover {
+    transform: scale(1.1);
+}
+
+.chart-container.active {
+    border: 3px solid #007bff; /* Thicker border */
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3); /* Adds a glowing effect */
+    background: white; /* Ensures content doesn't shift visually */
+}
+
+/* Optional: Add background gradient for active chart */
+.chart-container.active::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 123, 255, 0.1); /* Light blue overlay */
+    border-radius: inherit;
+    z-index: -1;
+}
+
+
+.chart-label {
+    position: absolute;
+    top: 70%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    width: 100%;
+}
+
+.chart-value {
+    font-size: 22px;
+    font-weight: bold;
+    display: block;
+}
+
+.chart-title {
+    font-size: 18px;
+    color: #666;
+    display: block;
+    margin-top: 5px;
+}
+
+/* Adjustments for tablets */
+@media (max-width: 1024px) {
+    .chart-value {
+        font-size: 20px;
+    }
+    .chart-title {
+        font-size: 16px;
+    }
+
+    .chart-container {
+        width: 40%;
+    }
+}
+
+/* Adjustments for smaller screens */
+@media (max-width: 768px) {
+    .chart-value {
+        font-size: 18px;
+    }
+    .chart-title {
+        font-size: 14px;
+    }
+    .chart-container {
+        width: 60%;
+    }
+}
+canvas {
+    width: 100%;
+}
+
+.charts-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    margin-bottom: 15px;
+}
+.detail-chart-title {
+    text-align: center;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+#fitnessChart {
+    width: 100%;   /* Make the chart width 100% of its parent container */
+    height: 300px; /* Fixed height */
+    margin: 20px;
+    margin-bottom: 50px;
+}

@@ -1,0 +1,72 @@
+.fit-cover {
+  object-fit: cover;
+}
+
+@keyframes slideIn {
+  from { transform: translateY(-100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes slideOut {
+  from { transform: translateY(0); opacity: 1; }
+  to { transform: translateY(-100%); opacity: 0; }
+}
+
+#alertContainer {
+  position: fixed;
+  top: 90px; /* Adjust according to navbar height */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%; /* Alert width set to 80% of screen */
+  max-width: 1200px;
+  z-index: 1050;
+  text-align: center;
+  pointer-events: none;
+}
+
+#alertContainer .alert {
+  display: inline-block;
+  pointer-events: auto;
+  width: 100%; /* Ensure alert takes full container width */
+  animation: slideIn 0.5s ease-out;
+}
+
+.alert.slide-out {
+  animation: slideOut 0.5s ease-out forwards;
+}
+
+input::-ms-reveal, input::-ms-clear {
+  display: none;
+}
+
+.align-left {
+  display: block;
+  text-align: left;
+}
+
+.input-error {
+  border: 1px solid red !important;
+}
+
+.input-error:focus {
+  border-color: red !important;
+  outline: none !important;
+  box-shadow: 0 0 3px red !important;
+}
+
+
+.loader {
+  border: 6px solid #f3f3f3;
+  border-top: 6px solid #3498db;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 1s linear infinite;
+  margin: 50px auto;
+  display: block; 
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
