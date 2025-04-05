@@ -16,6 +16,19 @@ require '../config.php';
     <link rel="stylesheet" href="assets/css/utils.css">
     <link rel="stylesheet" href="assets/css/styles.css">
     <link rel="stylesheet" href="assets/css/dashboard.css">
+
+    <script>
+        window.addEventListener("load", function () {
+            // Clean both query string and hash
+            const url = new URL(window.location);
+            if (url.searchParams.has("linked") || window.location.hash.includes("_=")) {
+                url.search = ""; // Remove query string
+                url.hash = "";   // Remove hash fragment
+                window.history.replaceState({}, document.title, url.pathname);
+            }
+        });
+    </script>
+
 </head>
 
 <body style="height: fit-content;width: inherit;">
@@ -56,11 +69,12 @@ require '../config.php';
                     Login / Register
                 </button>
 
-                <a href="https://www.fitbit.com/oauth2/authorize?response_type=code&amp;client_id=23QBW3&amp;scope=activity+cardio_fitness+electrocardiogram+heartrate+irregular_rhythm_notifications+location+nutrition+oxygen_saturation+profile+respiratory_rate+settings+sleep+social+temperature+weight&amp;redirect_uri=http%3A%2F%2Flocalhost%2Fhealth_dashboard%2Ffrontend%2F" target="_parent" id="linkLink" style="display: none;">
-                        <button class="btn btn-primary" type="button" style="color: var(--bs-black); background: var(--bs-warning);">
-                            Link <i class="fa fa-arrow-right ps-0 ms-2" style="font-size: 20px;"></i>
-                        </button>
+                <a href="fitbit_auth.php" id="linkLink">
+                <button class="btn btn-warning" type="button">
+                    Link <i class="fa fa-arrow-right ps-0 ms-2" style="font-size: 20px;"></i>
+                </button>
                 </a>
+
 
 
             </div>
