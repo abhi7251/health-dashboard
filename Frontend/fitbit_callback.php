@@ -1,5 +1,5 @@
 <?php
-session_start(); // Required to access session variables
+//session_start(); // Required to access session variables
 
 require '../config.php';
 

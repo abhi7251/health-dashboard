@@ -36,9 +36,9 @@ $endDate = date('Y-m-d');
 $startDate = date('Y-m-d', strtotime("-$days days"));
 
 // Fetch data
-$sql = "SELECT recorded_date, $metric FROM fitbit_data 
-        WHERE username = ? AND recorded_date BETWEEN ? AND ?
-        ORDER BY recorded_date ASC";
+$sql = "SELECT recorded_at, $metric FROM fitbit_data 
+        WHERE username = ? AND recorded_at BETWEEN ? AND ?
+        ORDER BY recorded_at ASC";
 
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("sss", $username, $startDate, $endDate);
@@ -49,7 +49,7 @@ $labels = [];
 $values = [];
 
 while ($row = $result->fetch_assoc()) {
-    $labels[] = date('D', strtotime($row['recorded_date']));  // e.g., Mon, Tue...
+    $labels[] = date('D', strtotime($row['recorded_at']));  // e.g., Mon, Tue...
     $values[] = (float) $row[$metric];
 }
 

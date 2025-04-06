@@ -76,7 +76,6 @@ const titleMap = {
     'weight': 'Weight History'
 };
 
-// Chart config
 const chartData = {
     steps: { value: 0, maxValue: 8000, color: '#4caf50' },
     calories: { value: 0, maxValue: 2500, color: '#ff9800' },
@@ -138,18 +137,17 @@ function fetchHistoryData(metric, range) {
     fetch(`get_history_data.php?metric=${metric}&range=${range}`)
         .then(response => response.json())
         .then(data => {
-            if (data.error) {
-                console.error("History fetch error:", data.error);
+            if (!Array.isArray(data.values)) {
+                console.error("Invalid historical data format.");
                 return;
             }
 
-            const labels = data.map(entry => entry.date);
-            const values = data.map(entry => parseFloat(entry.value));
-
             Chart.getChart("fitnessChart")?.destroy();
-            createDetailChart("fitnessChart", labels, values, chartData[metric].color);
+            createDetailChart('fitnessChart', data.labels, data.values, chartData[metric].color);
         })
-        .catch(error => console.error("Fetch error:", error));
+        .catch(error => {
+            console.error("Fetch error:", error);
+        });
 }
 
 function updateChart(chartId, value, maxValue) {
@@ -186,7 +184,6 @@ function syncData() {
         })
         .catch(error => console.error("Fetch error:", error));
 
-    // Clean up URL param
     if (window.history.replaceState) {
         const url = new URL(window.location);
         url.searchParams.delete("linked");
@@ -194,7 +191,6 @@ function syncData() {
     }
 }
 
-// Auto-sync on load
 document.addEventListener("DOMContentLoaded", function () {
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get("linked") === "1") {
