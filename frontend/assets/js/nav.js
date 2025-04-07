@@ -22,16 +22,14 @@ document.getElementById("aboutLink").addEventListener("click", function (event) 
 document.getElementById("activityLink").addEventListener("click", async function (event) {
     event.preventDefault();
     loadContent("dashboard.html", async function () {
+        //set all value in chartData to 0
+        for (const key in chartData) {
+            chartData[key].value = 0;
+        }
         createCharts();
         if (await checkLoginStatus() && await checkLinkedStatus()) {
             await loadData();
             await syncData();
-        }
-        else{
-            //set all value in chartData to 0
-            for (const key in chartData) {
-                chartData[key].value = 0;
-            }
         }
     });
     

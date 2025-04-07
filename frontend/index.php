@@ -58,7 +58,7 @@ require '../config.php';
                         Login / Register
                     </button>
 
-                    <a id="linkLink">
+                    <a id="linkLink" style="display:none;">
                     <button class="btn btn-warning" type="button">
                         Link <i class="fa fa-arrow-right ps-0 ms-2" style="font-size: 20px;"></i>
                     </button>

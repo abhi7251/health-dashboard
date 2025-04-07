@@ -165,7 +165,7 @@ function updateChart(chartId, value, maxValue) {
 }
 
 async function loadData() {
-    showAlert("Loading data...", "warning", 1000);   
+    showAlert("Loading data...", "warning", 2000);   
     fetch('../backend/api/get_today_data.php')
     .then(response => response.json())
     .then(data => {
@@ -184,12 +184,13 @@ async function loadData() {
             createCharts();
             showDetailChart(currentMetric);
         })
-        .catch(error => showAlert("Error syncing data: " + error, "danger", 2000));
+        .catch(error => showAlert("Error loading data: " + error, "danger", 2000));
         
     }
     
 async function syncData() {
-    showAlert("Syncing data...", "info", 4000);   
+    showAlert("Syncing data...", "info", 5000);   
+
     fetch('../backend/api/fitbit_data_fetch.php')
     .then(response => response.json())
     .then(data => {
@@ -197,7 +198,7 @@ async function syncData() {
            showAlert("Error fetching data: " + data.error, "danger", 3000);
             return;
         }
-
+       
        loadData();
        showAlert("Data synced successfully!", "success", 2000);
        

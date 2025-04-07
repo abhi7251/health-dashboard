@@ -1,4 +1,4 @@
-function showAlert(message, type = "success", timeout = 3000) {
+function showAlert(message, type = "success", timeout = 1000) {
     let messageDiv = document.getElementById("alertMessage");
 
     messageDiv.innerHTML = `
@@ -14,7 +14,7 @@ function showAlert(message, type = "success", timeout = 3000) {
         if (alertBox) {
             alertBox.classList.remove("show"); // Bootstrap fade effect
             alertBox.classList.add("fade"); 
-            setTimeout(() => alertBox.remove(), 500); // Ensure complete removal
+            setTimeout(() => alertBox.remove(), timeout); // Ensure complete removal
         }
     }, timeout);
 }

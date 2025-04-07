@@ -1,5 +1,7 @@
 <?php
 require_once '../config.php'; 
+header('Content-Type: application/json');
+
 if (isset($_SESSION['username'])) {
     // If the user is logged in, destroy session
     session_unset();
@@ -18,7 +20,6 @@ if (isset($_SESSION['username'])) {
     );
 }
 
-header('Content-Type: application/json');
 echo json_encode($response);
 exit;
 ?>
