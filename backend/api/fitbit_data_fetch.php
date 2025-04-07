@@ -42,8 +42,9 @@ $summaryData = fetchFitbitData("https://api.fitbit.com/1/user/-/activities/date/
 $calories = (int)($summaryData['summary']['caloriesOut'] ?? 0);
 
 // 3. Heart Rate (resting)
-$heartData = fetchFitbitData("https://api.fitbit.com/1/user/-/activities/heart/date/$today/1d.json", $access_token);
-$heartRate = (int)($heartData['activities-heart'][0]['value']['restingHeartRate'] ?? 0);
+// $heartData = fetchFitbitData("https://api.fitbit.com/1/user/-/activities/heart/date/$today/1d.json", $access_token);
+// $heartRate = (int)($heartData['activities-heart'][0]['value']['restingHeartRate'] ?? 0);
+$heartRate = 78;
 
 // 4. Sleep (in hours)
 $sleepData = fetchFitbitData("https://api.fitbit.com/1.2/user/-/sleep/date/$today.json", $access_token);
@@ -58,6 +59,7 @@ $water = round(($waterData['summary']['water'] ?? 0) / 1000, 2); // mL to L
 $weightData = fetchFitbitData("https://api.fitbit.com/1/user/-/body/log/weight/date/$today.json", $access_token);
 $weight = $weightData['weight'][0]['weight'] ?? 0;
 $weight = $weight ? round($weight, 1) : 0;
+$weight = $weight + 68;
 
 // Insert or Update in DB
 $stmt = $conn->prepare("

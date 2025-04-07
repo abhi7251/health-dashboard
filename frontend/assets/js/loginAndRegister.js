@@ -159,9 +159,7 @@ function logout(event) {
             if (data.status === "success") {
                 showAlert(data.message, "warning", 3000);
                 setLoginStatus(); // Refresh button
-                loadContent("index.php", function () {
-                    loadContent(data.redirect); // Redirect to login
-                });
+                loadContent("index.php");
             }
         })
         .catch(error => {
