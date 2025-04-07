@@ -59,7 +59,7 @@ $water = round(($waterData['summary']['water'] ?? 0) / 1000, 2); // mL to L
 $weightData = fetchFitbitData("https://api.fitbit.com/1/user/-/body/log/weight/date/$today.json", $access_token);
 $weight = $weightData['weight'][0]['weight'] ?? 0;
 $weight = $weight ? round($weight, 1) : 0;
-$weight = $weight + 68;
+$weight = $weight ;
 
 // Insert or Update in DB
 $stmt = $conn->prepare("
