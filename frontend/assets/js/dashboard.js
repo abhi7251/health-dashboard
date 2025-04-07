@@ -85,10 +85,11 @@ const chartData = {
     weight: { value: 0, maxValue: 150, color: '#795548' }
 };
 
-function createCharts() {
+async function createCharts() {
     $('canvas').each(function () {
         Chart.getChart(this)?.destroy();
     });
+
 
     Object.entries(chartData).forEach(([id, data]) => {
         createChart(id + "Chart", data.value, data.maxValue, data.color);
@@ -163,7 +164,7 @@ function updateChart(chartId, value, maxValue) {
     }
 }
 
-function loadData() {
+async function loadData() {
     showAlert("Loading data...", "warning", 1000);   
     fetch('../backend/api/get_today_data.php')
     .then(response => response.json())
@@ -187,8 +188,8 @@ function loadData() {
         
     }
     
-function syncData() {
-    showAlert("Syncing data...", "info", 2000);   
+async function syncData() {
+    showAlert("Syncing data...", "info", 4000);   
     fetch('../backend/api/fitbit_data_fetch.php')
     .then(response => response.json())
     .then(data => {
@@ -198,7 +199,7 @@ function syncData() {
         }
 
        loadData();
-       showAlert("Data synced successfully!", "success", 3000);
+       showAlert("Data synced successfully!", "success", 2000);
        
     })
     .catch(error => showAlert("Error syncing data: " + error, "danger", 3000));

@@ -15,17 +15,23 @@ for (var i = 0; i < elements.length; i++) {
 // Handle other navigation links
 document.getElementById("aboutLink").addEventListener("click", function (event) {
     event.preventDefault();
-    loadContent("about.html", function () {
-       
+    loadContent("about.html", function () { 
     });
 });
 
-document.getElementById("activityLink").addEventListener("click", function (event) {
+document.getElementById("activityLink").addEventListener("click", async function (event) {
     event.preventDefault();
     loadContent("dashboard.html", async function () {
+        createCharts();
         if (await checkLoginStatus() && await checkLinkedStatus()) {
-            console.log("User is logged in and linked. Loading dashboard.");
-            loadData();
+            await loadData();
+            await syncData();
+        }
+        else{
+            //set all value in chartData to 0
+            for (const key in chartData) {
+                chartData[key].value = 0;
+            }
         }
     });
     

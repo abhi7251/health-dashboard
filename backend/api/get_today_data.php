@@ -16,10 +16,7 @@ $stmt->bind_param("ss", $username, $today);
 $stmt->execute();
 $result = $stmt->get_result();
 
-if ($result->num_rows === 0) {
-    echo json_encode(['error' => 'No data found']);
-    exit;
-}
+
 
 $data = $result->fetch_assoc();
 $steps = (int)($data['steps'] ?? 0);
