@@ -22,11 +22,13 @@ document.getElementById("aboutLink").addEventListener("click", function (event) 
 
 document.getElementById("activityLink").addEventListener("click", function (event) {
     event.preventDefault();
-    loadContent("dashboard.html", function(){
-        createCharts();
-        showDetailChart();
-     
+    loadContent("dashboard.html", async function () {
+        if (await checkLoginStatus() && await checkLinkedStatus()) {
+            console.log("User is logged in and linked. Loading dashboard.");
+            loadData();
+        }
     });
+    
 });
 
 

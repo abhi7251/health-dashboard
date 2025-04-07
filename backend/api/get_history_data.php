@@ -1,18 +1,6 @@
 <?php
-session_start();
+require '../../config.php';
 header('Content-Type: application/json');
-
-// DB connection
-$host = "localhost";
-$user = "root";
-$password = "";
-$db = "health_dashboard";
-
-$conn = new mysqli($host, $user, $password, $db);
-if ($conn->connect_error) {
-    echo json_encode(["error" => "Database connection failed"]);
-    exit;
-}
 
 $username = $_SESSION['username'] ?? '';
 if (!$username) {
@@ -20,7 +8,7 @@ if (!$username) {
     exit;
 }
 
-// Get metric and range from query
+
 $metric = $_GET['metric'] ?? 'steps';
 $range = $_GET['range'] ?? 'weekly';
 
@@ -49,7 +37,7 @@ $labels = [];
 $values = [];
 
 while ($row = $result->fetch_assoc()) {
-    $labels[] = date('D', strtotime($row['recorded_at']));  // e.g., Mon, Tue...
+    $labels[] = date('j/n', strtotime($row['recorded_at']));
     $values[] = (float) $row[$metric];
 }
 
@@ -59,4 +47,4 @@ echo json_encode([
 ]);
 
 $stmt->close();
-$conn->close();
+

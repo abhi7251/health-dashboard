@@ -77,12 +77,12 @@ const titleMap = {
 };
 
 const chartData = {
-    steps: { value: 0, maxValue: 8000, color: '#4caf50' },
+    steps: { value: 0, maxValue: 10000, color: '#4caf50' },
     calories: { value: 0, maxValue: 2500, color: '#ff9800' },
     heartRate: { value: 0, maxValue: 220, color: '#f44336' },
-    water: { value: 0, maxValue: 3, color: '#2196f3' },
-    sleep: { value: 0, maxValue: 9, color: '#9c27b0' },
-    weight: { value: 0, maxValue: 120, color: '#795548' }
+    water: { value: 0, maxValue: 4, color: '#2196f3' },
+    sleep: { value: 0, maxValue: 10, color: '#9c27b0' },
+    weight: { value: 0, maxValue: 150, color: '#795548' }
 };
 
 function createCharts() {
@@ -99,6 +99,8 @@ function createCharts() {
                 id === 'water' ? ' L' :
                 id === 'sleep' ? ' hrs' :
                 id === 'weight' ? ' kg' :
+                id === 'heartRate' ? ' bpm' :
+                id === 'calories' ? ' kcal' : 
                 ''
             );
         }
@@ -134,7 +136,7 @@ function updateTimeRange(range) {
 }
 
 function fetchHistoryData(metric, range) {
-    fetch(`get_history_data.php?metric=${metric}&range=${range}`)
+    fetch(`../backend/api/get_history_data.php?metric=${metric}&range=${range}`)
         .then(response => response.json())
         .then(data => {
             if (!Array.isArray(data.values)) {
@@ -154,48 +156,53 @@ function updateChart(chartId, value, maxValue) {
     const canvas = document.getElementById(chartId);
     if (!canvas) return;
 
-    const chart = Chart.getChart(canvas);
+    const chart = chart.getChart(canvas);
     if (chart) {
         chart.data.datasets[0].data = [value, maxValue - value];
         chart.update();
     }
 }
 
-function syncData() {
-    showAlert("Syncing data...", "info", 1000);
-
-    fetch('fitbit_data_fetch.php')
-        .then(response => response.json())
-        .then(data => {
+function loadData() {
+    showAlert("Loading data...", "warning", 1000);   
+    fetch('../backend/api/get_today_data.php')
+    .then(response => response.json())
+    .then(data => {
             if (data.error) {
-                console.error("Fitbit fetch error:", data.error);
+                showAlert("Error fetching data: " + data.error, "danger", 2000);
                 return;
             }
-
+            
             chartData.steps.value = data.steps || 0;
             chartData.calories.value = data.calories || 0;
             chartData.heartRate.value = data.heartRate || 0;
             chartData.water.value = data.water || 0;
             chartData.sleep.value = data.sleep || 0;
             chartData.weight.value = data.weight || 0;
-
+            
             createCharts();
             showDetailChart(currentMetric);
         })
-        .catch(error => console.error("Fetch error:", error));
-
-    if (window.history.replaceState) {
-        const url = new URL(window.location);
-        url.searchParams.delete("linked");
-        window.history.replaceState({}, document.title, url.pathname);
+        .catch(error => showAlert("Error syncing data: " + error, "danger", 2000));
+        
     }
+    
+function syncData() {
+    showAlert("Syncing data...", "info", 2000);   
+    fetch('../backend/api/fitbit_data_fetch.php')
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+           showAlert("Error fetching data: " + data.error, "danger", 3000);
+            return;
+        }
+
+       loadData();
+       showAlert("Data synced successfully!", "success", 3000);
+       
+    })
+    .catch(error => showAlert("Error syncing data: " + error, "danger", 3000));
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get("linked") === "1") {
-        syncData();
-    } else {
-        syncData();
-    }
-});
+
+

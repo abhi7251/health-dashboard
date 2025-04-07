@@ -1,13 +1,8 @@
 <?php
-//session_start(); // Required to access session variables
+require '../../config.php';
+require 'apiInfo.php';
 
-require '../config.php';
-
-$client_id = "23QD7Q"; // Replace with your actual client ID
-$client_secret = "f335033977cd67377b0984d26a58da91"; // Replace with your actual client secret
-$redirect_uri = "http://localhost/health-dashboard/frontend/fitbit_callback.php";
-
-// Check if code is returned in the callback
+$redirect_uri = "http://localhost/health-dashboard/backend/api/fitbit_callback.php"; 
 if (isset($_GET['code'])) {
     $code = $_GET['code'];
 
@@ -64,10 +59,9 @@ if (isset($_GET['code'])) {
         $stmt = $conn->prepare("REPLACE INTO fitbit_tokens (username, access_token, refresh_token, user_id) VALUES (?, ?, ?, ?)");
         $stmt->bind_param("ssss", $username, $access_token, $refresh_token, $user_id);
         $stmt->execute();
+        $stmt->close();
 
-        // Redirect to a data display or dashboard
-        // Redirect back to main dashboard (single-page app)
-        header("Location: index.php?linked=1");
+        header("Location: ../../frontend/index.php");
         exit();
 
     } else {

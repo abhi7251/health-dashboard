@@ -12,7 +12,7 @@
 }
 
 .chart-container:hover {
-    transform: scale(1.1);
+    transform: scale(1.2);
 }
 
 .chart-container.active {
@@ -35,6 +35,9 @@
     z-index: -1;
 }
 
+.chart-icon {
+    width: 100%;
+}
 
 .chart-label {
     position: absolute;

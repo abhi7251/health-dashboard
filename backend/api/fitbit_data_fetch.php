@@ -1,6 +1,6 @@
 <?php
 //session_start();
-require '../config.php';
+require '../../config.php';
 
 header('Content-Type: application/json');
 
@@ -18,6 +18,7 @@ if ($result->num_rows === 0) {
     echo json_encode(['error' => 'No token found']);
     exit;
 }
+
 $access_token = $result->fetch_assoc()['access_token'];
 
 // Helper function
@@ -74,13 +75,5 @@ $stmt->bind_param("ssiiiddd", $username, $today, $steps, $calories, $heartRate, 
 $stmt->execute();
 $stmt->close();
 
-// Return JSON to frontend
-echo json_encode([
-    'steps' => $steps,
-    'calories' => $calories,
-    'heartRate' => $heartRate,
-    'sleep' => $sleep,
-    'water' => $water,
-    'weight' => $weight
-]);
+echo json_encode(['data' => 'successfully fetched and stored']);
 ?>

@@ -38,7 +38,20 @@ $tableSql = "CREATE TABLE IF NOT EXISTS users (
     password VARCHAR(255) NOT NULL
 )";
 
-if (!$conn->query($tableSql)) {
+$sql = "CREATE TABLE IF NOT EXISTS fitbit_data (
+    username VARCHAR(255),
+    recorded_at DATE,
+    steps INT,
+    calories INT,
+    heartRate INT,
+    water FLOAT,
+    sleep FLOAT,
+    weight FLOAT,
+    PRIMARY KEY (username, recorded_at)
+)";
+
+
+if (!$conn->query($tableSql) || !$conn->query($sql)) {
     echo json_encode(['status' => 'error', 'message' => 'Error creating table: ' . $conn->error]);
     exit();
 }

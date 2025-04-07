@@ -1,7 +1,3 @@
-document.addEventListener("DOMContentLoaded", function () {
-    checkLoginStatus();
-});
-
 document.addEventListener("click", function (event) {
     if (event.target.id === "registerLink") {
         event.preventDefault();
@@ -10,29 +6,88 @@ document.addEventListener("click", function (event) {
 });
 
 
+async function checkLinkedStatus() {
+    try {
+        const response = await fetch("../backend/api/isLinked.php");
+        const data = await response.json();
+        return data.linked === true;
+    } catch (error) {
+        showAlert("Error checking link status", "danger", 3000);
+        return false;
+    }
+}
+
+async function setLinkedButton(linkLink) {
+    const button = linkLink.querySelector("button"); 
+    const icon = button.querySelector("i");            
+
+    const isLinked = await checkLinkedStatus(); 
+
+    if (isLinked) {
+        button.textContent = "De-Link";
+        button.appendChild(icon); 
+        icon.classList.replace("fa-arrow-right", "fa-sync");
+
+        // Set onclick for de-link
+        button.onclick = async () => {
+            const confirmed = confirm("Are you sure you want to de-link your Fitbit account?");
+            if (!confirmed) return;
+
+            const res = await fetch("../backend/api/deLink.php", { method: "POST" });
+            const result = await res.json();
+
+            if (result.success) {
+                showAlert("Fitbit account de-linked!", "success", 3000);
+                setLinkedButton(linkLink); // Refresh button state
+            } else {
+                showAlert("Failed to de-link account.", "danger", 3000);
+            }
+        };
+
+    } else {
+        button.textContent = "Link";
+        button.appendChild(icon);
+        icon.classList.replace("fa-sync", "fa-arrow-right");
+
+        // Set onclick for link
+        button.onclick = () => {
+            window.location.href = "../backend/api/fitbit_auth.php";
+        };
+    }
+}
 
 // Function to check login status and update button
-function checkLoginStatus() {
-    fetch("../backend/session_status.php")
-        .then(response => response.json())
-        .then(data => {
-            const loginButton = document.getElementById("loginLink");
-            const linkButton = document.getElementById("linkLink");
-
-            if (data.logged_in) {
-                loginButton.innerHTML = "Logout";
-                linkButton.style.display = "inline-block";
-                loginButton.removeEventListener("click", loginHandler);
-                loginButton.addEventListener("click", logout);
-            } else {
-                loginButton.innerHTML = "Login / Register";
-                linkButton.style.display = "none";
-                loginButton.removeEventListener("click", logout);
-                loginButton.addEventListener("click", loginHandler);
-            }
-        })
-        .catch(error => console.error("Error checking session:", error));
+async function checkLoginStatus() {
+    try {
+        const response = await fetch("../backend/session_status.php");
+        const data = await response.json();
+        return data.logged_in === true;
+    } catch (error) {
+        console.error("Error checking session:", error);
+        return false;
+    }
 }
+
+async function setLoginStatus() {
+    const loginButton = document.getElementById("loginLink");
+    const linkButton = document.getElementById("linkLink");
+
+    const isLoggedIn = await checkLoginStatus(); // now this works correctly
+
+    if (isLoggedIn) {
+        loginButton.innerHTML = "Logout";
+        loginButton.removeEventListener("click", loginHandler);
+        loginButton.addEventListener("click", logout);
+        linkButton.style.display = "inline-block";
+        setLinkedButton(linkButton); // this must also be async if it awaits inside
+    } else {
+        loginButton.innerHTML = "Login / Register";
+        loginButton.removeEventListener("click", logout);
+        loginButton.addEventListener("click", loginHandler);
+        linkButton.style.display = "none";
+    }
+}
+
 
 
 
@@ -103,7 +158,7 @@ function logout(event) {
         .then(data => {
             if (data.status === "success") {
                 showAlert(data.message, "warning", 3000);
-                checkLoginStatus(); // Refresh button
+                setLoginStatus(); // Refresh button
                 loadContent(data.redirect); // Redirect
             }
         })
@@ -136,7 +191,7 @@ function login() {
         showAlert("An error occurred. Please try again.", "danger", 3000);
     });
 
-    checkLoginStatus();
+    setLoginStatus();
 }
 
 
@@ -162,8 +217,13 @@ function register() {
         showAlert("An error occurred. Please try again.", "danger", 3000);
     });
 
-    checkLoginStatus();
+    setLoginStatus();
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+    setLoginStatus();
+});
+
 
 
 $(document).ready(function () {
