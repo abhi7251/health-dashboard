@@ -182,7 +182,11 @@ function login() {
     .then(response => response.json())
     .then(data => {
         if (data.status === "success") {
-            loadContent(data.redirect);
+            setLoginStatus();
+            //wait untill setLoginStatus finish execution
+            setTimeout(() => {
+                loadContent(data.redirect);
+            }, 1000); // wait for 1 second before loading content
             showAlert(data.message, "success", 3000);
         } else {
             showAlert(data.message, "danger", 3000);
