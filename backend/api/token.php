@@ -3,13 +3,24 @@ require 'apiInfo.php';
 
 function refresh_token($username, $conn){
     global $client_id, $client_secret;
-    $refresh_token = $conn->query("SELECT refresh_token FROM fitbit_tokens WHERE username = '$username'");
 
-    if (!$refresh_token) return false;
+    // Securely fetch refresh token
+    $stmt = $conn->prepare("SELECT refresh_token FROM fitbit_tokens WHERE username = ?");
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $stmt->close();
+
+    if (!$result || $result->num_rows === 0) {
+        error_log("No refresh token found for user: $username");
+        return false;
+    }
+
+    $refresh_token = $result->fetch_assoc()['refresh_token'];
 
     $data = http_build_query([
         'grant_type' => 'refresh_token',
-        'refresh_token' => $refresh_token,
+        'refresh_token' => $refresh_token
     ]);
 
     $headers = [
@@ -24,11 +35,17 @@ function refresh_token($username, $conn){
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
     $response = curl_exec($ch);
-    curl_close($ch);
 
+    if (curl_errno($ch)) {
+        error_log('Curl error during token refresh: ' . curl_error($ch));
+        curl_close($ch);
+        return false;
+    }
+
+    curl_close($ch);
     $result = json_decode($response, true);
 
-    if (isset($result['access_token'])) {
+    if (isset($result['access_token']) && isset($result['refresh_token'])) {
         $new_access_token = $result['access_token'];
         $new_refresh_token = $result['refresh_token'];
 
@@ -40,6 +57,7 @@ function refresh_token($username, $conn){
         return $new_access_token;
     }
 
+    error_log("Failed to refresh token for $username. Response: $response");
     return false;
 }
 
@@ -53,21 +71,24 @@ function isTokenValid($access_token) {
     $ch = curl_init($url);
     curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
     $response = curl_exec($ch);
 
     if (curl_errno($ch)) {
-        echo 'Curl error: ' . curl_error($ch);
+        $error_msg = curl_error($ch);
+        error_log("❌ cURL Error in isTokenValid: $error_msg");
+        curl_close($ch);
         return null;
     }
 
     $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
 
-    if ($httpCode == 401) {
-        return false;
-    }
+    error_log("✅ isTokenValid HTTP $httpCode | Response: $response");
 
-    return true;
-
+    return $httpCode === 200;
 }
+
+
+
 ?>
