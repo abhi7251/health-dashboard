@@ -32,17 +32,15 @@ function createChart(chartId, value, maxValue, color) {
 
 function createDetailChart(canvasId, labels, data, barColor) {
     const ctx = document.getElementById(canvasId).getContext('2d');
-
+    //histogram chart
     new Chart(ctx, {
-        type: 'bar',
+        type: 'line',
         data: {
             labels: labels,
             datasets: [{
                 data: data,
-                backgroundColor: barColor,
-                borderRadius: 10,
-                borderWidth: 1,
-                barThickness: 15
+                borderColor: barColor,
+                tension: 0.4,
             }]
         },
         options: {
@@ -189,7 +187,7 @@ async function loadData() {
     }
     
 async function syncData() {
-    showAlert("Syncing data...", "info", 5000);   
+    showAlert("Syncing data...", "info", 20000);   
 
     fetch('../backend/api/fitbit_data_fetch.php')
     .then(response => response.json())

@@ -10,7 +10,6 @@ if (!isset($_SESSION['username'])) {
 }
 
 $username = $_SESSION['username'];
-$today = date('Y-m-d');
 
 // Get access token
 $result = $conn->query("SELECT access_token FROM fitbit_tokens WHERE username = '$username'");
@@ -33,35 +32,67 @@ function fetchFitbitData($url, $access_token) {
     return json_decode($response, true);
 }
 
-// 1. Steps
-$stepsData = fetchFitbitData("https://api.fitbit.com/1/user/-/activities/steps/date/$today/1d.json", $access_token);
-$steps = (int)($stepsData['activities-steps'][0]['value'] ?? 0);
+$startDate = new DateTime('-30 days');
+$endDate = new DateTime(); // today
 
-// 2. Calories
-$summaryData = fetchFitbitData("https://api.fitbit.com/1/user/-/activities/date/$today.json", $access_token);
-$calories = (int)($summaryData['summary']['caloriesOut'] ?? 0);
+$interval = new DateInterval('P1D');
+$period = new DatePeriod($startDate, $interval, $endDate->modify('+1 day'));
 
-// 3. Heart Rate (resting)
-// $heartData = fetchFitbitData("https://api.fitbit.com/1/user/-/activities/heart/date/$today/1d.json", $access_token);
-// $heartRate = (int)($heartData['activities-heart'][0]['value']['restingHeartRate'] ?? 0);
-$heartRate = 78;
+// Fetch all 30 days of data first
+$stepsData    = fetchFitbitData("https://api.fitbit.com/1/user/-/activities/steps/date/{$startDate->format('Y-m-d')}/{$endDate->format('Y-m-d')}.json", $access_token);
+$caloriesData = fetchFitbitData("https://api.fitbit.com/1/user/-/activities/calories/date/{$startDate->format('Y-m-d')}/{$endDate->format('Y-m-d')}.json", $access_token);
+$heartData    = fetchFitbitData("https://api.fitbit.com/1/user/-/activities/heart/date/{$startDate->format('Y-m-d')}/{$endDate->format('Y-m-d')}.json", $access_token);
+$sleepData    = fetchFitbitData("https://api.fitbit.com/1.2/user/-/sleep/date/{$startDate->format('Y-m-d')}/{$endDate->format('Y-m-d')}.json", $access_token);
+$waterData    = fetchFitbitData("https://api.fitbit.com/1/user/-/foods/log/water/date/{$startDate->format('Y-m-d')}/{$endDate->format('Y-m-d')}.json", $access_token);
+$weightData   = fetchFitbitData("https://api.fitbit.com/1/user/-/body/log/weight/date/{$startDate->format('Y-m-d')}/{$endDate->format('Y-m-d')}.json", $access_token);
 
-// 4. Sleep (in hours)
-$sleepData = fetchFitbitData("https://api.fitbit.com/1.2/user/-/sleep/date/$today.json", $access_token);
-$totalMinutesAsleep = $sleepData['summary']['totalMinutesAsleep'] ?? 0;
-$sleep = round($totalMinutesAsleep / 60, 1);
+// Index data by date for quick lookup
+function indexByDate($list, $key = 'dateTime') {
+    $map = [];
+    foreach ($list as $item) {
+        $map[$item[$key]] = $item;
+    }
+    return $map;
+}
+$stepsMap    = indexByDate($stepsData['activities-steps'] ?? []);
+$caloriesMap = indexByDate($caloriesData['activities-calories'] ?? []);
+$heartMap    = indexByDate($heartData['activities-heart'] ?? []);
 
-// 5. Water (in liters)
-$waterData = fetchFitbitData("https://api.fitbit.com/1/user/-/foods/log/water/date/$today.json", $access_token);
-$water = round(($waterData['summary']['water'] ?? 0) / 1000, 2); // mL to L
+$sleepMap = [];
+foreach ($sleepData['sleep'] ?? [] as $entry) {
+    $date = $entry['dateOfSleep'];
+    $sleepMap[$date] = ($sleepMap[$date] ?? 0) + ($entry['minutesAsleep'] ?? 0);
+}
 
-// 6. Weight (kg)
-$weightData = fetchFitbitData("https://api.fitbit.com/1/user/-/body/log/weight/date/$today.json", $access_token);
-$weight = $weightData['weight'][0]['weight'] ?? 0;
-$weight = $weight ? round($weight, 1) : 0;
-$weight = $weight ;
+$waterMap = indexByDate($waterData['foods-log-water'] ?? []);
+$weightMap = [];
 
-// Insert or Update in DB
+//store previous weight if current weight is not available
+$weightEntries = $weightData['weight'] ?? [];
+$weightMap = [];
+
+// Create a map of actual logged weights
+$loggedWeights = [];
+foreach ($weightEntries as $entry) {
+    $loggedWeights[$entry['date']] = $entry['weight'];
+}
+
+// Fill weightMap with values for every date in the range
+$prevWeight = null;
+foreach ($period as $dateObj) {
+    $date = $dateObj->format('Y-m-d');
+
+    if (isset($loggedWeights[$date])) {
+        $prevWeight = $loggedWeights[$date]; // Update prev weight
+    }
+
+    // Store previous weight if exists, or 0 if still unknown
+    $weightMap[$date] = ['weight' => $prevWeight ?? 0];
+}
+
+
+
+// Prepare the insert/update statement
 $stmt = $conn->prepare("
     INSERT INTO fitbit_data (username, recorded_at, steps, calories, heartRate, sleep, water, weight)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?)
@@ -73,9 +104,26 @@ $stmt = $conn->prepare("
         water = VALUES(water),
         weight = VALUES(weight)
 ");
-$stmt->bind_param("ssiiiddd", $username, $today, $steps, $calories, $heartRate, $sleep, $water, $weight);
-$stmt->execute();
-$stmt->close();
+
+foreach ($period as $date) {
+    $today = $date->format('Y-m-d');
+
+    $steps = (int)($stepsMap[$today]['value'] ?? 0);
+    $calories = (int)($caloriesMap[$today]['value'] ?? 0);
+    $heartRate = (int)($heartMap[$today]['value']['restingHeartRate'] ?? 0);
+    $sleep = round(($sleepMap[$today] ?? 0) / 60, 1); // in hours
+    $water = round(($waterMap[$today]['value'] ?? 0) / 1000, 2); // in liters
+    $weight = isset($weightMap[$today]) ? round($weightMap[$today]['weight'], 1) : 0;
+
+    $stmt->bind_param("ssiiiddd", $username, $today, $steps, $calories, $heartRate, $sleep, $water, $weight);
+    $stmt->execute();
+}
+
+// Clean up: Delete old records (before 30 days ago)
+$cutoff = $startDate->format('Y-m-d');
+$deleteStmt = $conn->prepare("DELETE FROM fitbit_data WHERE username = ? AND recorded_at < ?");
+$deleteStmt->bind_param("ss", $username, $cutoff);
+$deleteStmt->execute();
 
 echo json_encode(['data' => 'successfully fetched and stored']);
 ?>

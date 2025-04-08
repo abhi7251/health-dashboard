@@ -2,6 +2,7 @@
 
 require '../../config.php';
 require 'apiInfo.php';
+require 'getToken.php';
 
 
 $username = $_SESSION['username'];

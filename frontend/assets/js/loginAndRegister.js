@@ -39,6 +39,8 @@ async function setLinkedButton(linkLink) {
             if (result.success) {
                 showAlert("Fitbit account de-linked!", "success", 3000);
                 setLinkedButton(linkLink); // Refresh button state
+                loadContent("index.php");
+                
             } else {
                 showAlert("Failed to de-link account.", "danger", 3000);
             }
