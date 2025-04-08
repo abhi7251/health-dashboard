@@ -22,7 +22,7 @@ if ($result->num_rows === 0) {
 $access_token = $result->fetch_assoc()['access_token'];
 
 $valid = isTokenValid($access_token); 
-if ($valid == null) {
+if ($valid == null) { // Check if the token is valid
     echo json_encode(['error' => 'Invalid access token.']);
     exit;
 }
