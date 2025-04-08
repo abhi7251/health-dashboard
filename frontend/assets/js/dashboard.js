@@ -188,12 +188,8 @@ async function loadData() {
     }
     
 async function syncData() {
-<<<<<<< Updated upstream
-    showAlert("Syncing data...", "info", 20000);   
-=======
-    showAlert("Syncing data...", "info", 60000);   
->>>>>>> Stashed changes
 
+    showAlert("Syncing data...", "info", 60000);   
     fetch('../backend/api/fitbit_data_fetch.php')
     .then(response => response.json())
     .then(data => {
