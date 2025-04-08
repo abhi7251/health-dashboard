@@ -32,15 +32,17 @@ function createChart(chartId, value, maxValue, color) {
 
 function createDetailChart(canvasId, labels, data, barColor) {
     const ctx = document.getElementById(canvasId).getContext('2d');
-    //histogram chart
+
     new Chart(ctx, {
-        type: 'line',
+        type: 'bar',
         data: {
             labels: labels,
             datasets: [{
                 data: data,
-                borderColor: barColor,
-                tension: 0.4,
+                backgroundColor: barColor,
+                borderRadius: 10,
+                borderWidth: 1,
+                barThickness: 15
             }]
         },
         options: {
@@ -163,7 +165,6 @@ function updateChart(chartId, value, maxValue) {
 }
 
 async function loadData() {
-    showAlert("Loading data...", "warning", 2000);   
     fetch('../backend/api/get_today_data.php')
     .then(response => response.json())
     .then(data => {
@@ -179,8 +180,8 @@ async function loadData() {
             chartData.sleep.value = data.sleep || 0;
             chartData.weight.value = data.weight || 0;
             
-            createCharts();
             showDetailChart(currentMetric);
+            createCharts();
         })
         .catch(error => showAlert("Error loading data: " + error, "danger", 2000));
         

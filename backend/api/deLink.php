@@ -1,14 +1,13 @@
 <?php
-
 require '../../config.php';
 require 'apiInfo.php';
-require 'getToken.php';
+require 'token.php';
 
 
 $username = $_SESSION['username'];
 
 if (!$username) {
-    echo json_encode(['error' => 'Session expired. Please log in again.']);
+    echo json_encode(['error' => 'Not logged in.']);
     exit;
 }
 $result = $conn->query("SELECT access_token FROM fitbit_tokens WHERE username = '$username'");
@@ -18,6 +17,18 @@ if ($result->num_rows === 0) {
 }
 
 $access_token = $result->fetch_assoc()['access_token'];
+$valid = isTokenValid($access_token);
+if ($valid == null) {
+    echo json_encode(['error' => 'Invalid access token.']);
+    exit;
+}
+else if($valid == false){
+    $access_token = refresh_token($username, $conn);
+    if($access_token == false){
+        echo json_encode(['error' => 'Failed to refresh token']);
+        exit;
+    }
+}
 
 $headers = [
     "Authorization: Basic " . base64_encode("$client_id:$client_secret"),

@@ -1,6 +1,7 @@
 <?php
 //session_start();
 require '../../config.php';
+require 'token.php';
 
 header('Content-Type: application/json');
 
@@ -19,6 +20,19 @@ if ($result->num_rows === 0) {
 }
 
 $access_token = $result->fetch_assoc()['access_token'];
+
+$valid = isTokenValid($access_token);
+if ($valid == null) {
+    echo json_encode(['error' => 'Invalid access token.']);
+    exit;
+}
+else if($valid == false){
+    $access_token = refresh_token($username, $conn);
+    if($access_token == false){
+        echo json_encode(['error' => 'Failed to refresh token']);
+        exit;
+    }
+}
 
 // Helper function
 function fetchFitbitData($url, $access_token) {
