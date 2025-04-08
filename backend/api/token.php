@@ -56,6 +56,7 @@ function isTokenValid($access_token) {
     $response = curl_exec($ch);
 
     if (curl_errno($ch)) {
+        echo 'Curl error: ' . curl_error($ch);
         return null;
     }
 
