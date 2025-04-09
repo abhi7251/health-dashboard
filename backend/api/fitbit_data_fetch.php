@@ -20,6 +20,7 @@ if ($result->num_rows === 0) {
 }
 
 $access_token = $result->fetch_assoc()['access_token'];
+$access_token = refresh_token($username, $conn);
 
 $valid = isTokenValid($access_token); 
 if ($valid === null) { // Check if the token is valid
@@ -27,7 +28,6 @@ if ($valid === null) { // Check if the token is valid
     exit;
 }
 else if($valid === false){
-    $access_token = refresh_token($username, $conn);
     if($access_token === false){
         echo json_encode(['error' => 'Failed to refresh token']);
         exit;
