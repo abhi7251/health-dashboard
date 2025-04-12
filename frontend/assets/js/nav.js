@@ -29,6 +29,7 @@ document.getElementById("activityLink").addEventListener("click", async function
         createCharts();
         if (await checkLoginStatus() && await checkLinkedStatus()) {
             await loadData();
+            await fetchHistoryData();
             await syncData();
         }
     });

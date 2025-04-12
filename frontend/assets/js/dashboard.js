@@ -30,19 +30,34 @@ function createChart(chartId, value, maxValue, color) {
     });
 }
 
-function createDetailChart(canvasId, labels, data, barColor) {
+function createDetailChart(canvasId, labels, data, color, type = 'bar') {
     const ctx = document.getElementById(canvasId).getContext('2d');
 
+    let backgroundGradient = null;
+
+    if (type === 'line') {
+        const height = ctx.canvas.clientHeight || 300; // fallback to 300
+        backgroundGradient = ctx.createLinearGradient(0, 0, 0, height);
+        backgroundGradient.addColorStop(0, color + '66'); // top (semi-opaque)
+        backgroundGradient.addColorStop(1, color + '00'); // bottom (transparent)
+    }
+    
+
     new Chart(ctx, {
-        type: 'bar',
+        type: type,
         data: {
             labels: labels,
             datasets: [{
                 data: data,
-                backgroundColor: barColor,
-                borderRadius: 10,
-                borderWidth: 1,
-                barThickness: 15
+                backgroundColor: type === 'bar' ? color : backgroundGradient,
+                borderColor: color,
+                borderWidth: 3,
+                fill: type === 'line', // only fill under line chart
+                tension: type === 'line' ? 0.4 : 0,
+                pointRadius: 3,
+                pointBackgroundColor: color,
+                borderRadius: type === 'bar' ? 10 : 0,
+                barThickness: type === 'bar' ? 15 : undefined
             }]
         },
         options: {
@@ -66,6 +81,7 @@ function createDetailChart(canvasId, labels, data, barColor) {
 
 let currentMetric = 'steps';
 let currentTimeRange = 'weekly';
+let currentChartType = 'bar';
 
 const titleMap = {
     'steps': 'Steps History',
@@ -93,7 +109,12 @@ async function createCharts() {
 
     Object.entries(chartData).forEach(([id, data]) => {
         createChart(id + "Chart", data.value, data.maxValue, data.color);
+    });
+    updateCharts();
+}
 
+function updateCharts() {
+    Object.entries(chartData).forEach(([id, data]) => {
         const valueSpan = document.querySelector(`#${id}ChartContainer .chart-value`);
         if (valueSpan) {
             valueSpan.textContent = data.value + (
@@ -105,63 +126,13 @@ async function createCharts() {
                 ''
             );
         }
+        //update chart value in the doughnut chart
+        const chart = Chart.getChart(id + "Chart");
+        if (chart) {
+            chart.data.datasets[0].data[0] = data.value;
+            chart.update();
+        }
     });
-}
-
-function showDetailChart(metric = null) {
-    if (metric) currentMetric = metric;
-
-    $('.chart-container').removeClass('active');
-    $(`#${currentMetric}ChartContainer`).addClass('active');
-
-    updateDetailChartTitle();
-    updateTimeRange(currentTimeRange);
-}
-
-function updateDetailChartTitle() {
-    document.getElementById('detailChartTitle').textContent = titleMap[currentMetric] || 'Activity History';
-}
-
-function updateTimeRange(range) {
-    currentTimeRange = range;
-
-    document.getElementById('weeklyBtn').classList.toggle('active', range === 'weekly');
-    document.getElementById('weeklyBtn').classList.toggle('btn-primary', range === 'weekly');
-    document.getElementById('weeklyBtn').classList.toggle('btn-outline-primary', range !== 'weekly');
-
-    document.getElementById('monthlyBtn').classList.toggle('active', range === 'monthly');
-    document.getElementById('monthlyBtn').classList.toggle('btn-primary', range === 'monthly');
-    document.getElementById('monthlyBtn').classList.toggle('btn-outline-primary', range !== 'monthly');
-
-    fetchHistoryData(currentMetric, currentTimeRange);
-}
-
-function fetchHistoryData(metric, range) {
-    fetch(`../backend/api/get_history_data.php?metric=${metric}&range=${range}`)
-        .then(response => response.json())
-        .then(data => {
-            if (!Array.isArray(data.values)) {
-                console.error("Invalid historical data format.");
-                return;
-            }
-
-            Chart.getChart("fitnessChart")?.destroy();
-            createDetailChart('fitnessChart', data.labels, data.values, chartData[metric].color);
-        })
-        .catch(error => {
-            console.error("Fetch error:", error);
-        });
-}
-
-function updateChart(chartId, value, maxValue) {
-    const canvas = document.getElementById(chartId);
-    if (!canvas) return;
-
-    const chart = chart.getChart(canvas);
-    if (chart) {
-        chart.data.datasets[0].data = [value, maxValue - value];
-        chart.update();
-    }
 }
 
 async function loadData() {
@@ -180,15 +151,70 @@ async function loadData() {
             chartData.sleep.value = data.sleep || 0;
             chartData.weight.value = data.weight || 0;
             
-            showDetailChart(currentMetric);
-            createCharts();
+            updateCharts();
         })
         .catch(error => showAlert("Error loading data: " + error, "danger", 2000));
         
-    }
-    
-async function syncData() {
+}
 
+function setMetric(metric = null) {
+    if (metric){
+        if(currentMetric === metric) return;
+        currentMetric = metric;
+    } 
+
+    $('.chart-container').removeClass('active');
+    $(`#${currentMetric}ChartContainer`).addClass('active');
+
+    updateDetailChartTitle();
+    fetchHistoryData(currentMetric, currentTimeRange);
+}
+
+function updateDetailChartTitle() {
+    document.getElementById('detailChartTitle').textContent = titleMap[currentMetric] || 'Activity History';
+}
+
+labels = [], values = [];
+function createBigChart() {
+    Chart.getChart("fitnessChart")?.destroy();
+    createDetailChart('fitnessChart', labels, values, chartData[currentMetric].color,currentChartType);
+}
+
+
+function updateTimeRange(range) {
+    currentTimeRange = range;
+    document.getElementById('weeklyBtn').classList.toggle('active', range === 'weekly');
+    document.getElementById('monthlyBtn').classList.toggle('active', range === 'monthly');
+
+    fetchHistoryData(currentMetric, currentTimeRange);
+}
+
+function setChartType(type) {   
+    currentChartType = type;
+    document.getElementById('lineChartBtn').classList.toggle('active', type === 'line');
+    document.getElementById('barChartBtn').classList.toggle('active', type === 'bar');
+    fetchHistoryData(currentMetric, currentTimeRange);
+}
+
+async function fetchHistoryData() {
+    metric = currentMetric, range = currentTimeRange;
+    fetch(`../backend/api/get_history_data.php?metric=${metric}&range=${range}`)
+        .then(response => response.json())
+        .then(data => {
+            if (!Array.isArray(data.values)) {
+                console.error("Invalid historical data format.");
+                return;
+            }
+            labels = data.labels || [];
+            values = data.values || [];
+            createBigChart();
+        })
+        .catch(error => {
+            console.error("Fetch error:", error);
+        });
+}
+
+async function syncData() {
     showAlert("Syncing data...", "info", 60000);   
     fetch('../backend/api/fitbit_data_fetch.php')
     .then(response => response.json())
@@ -199,6 +225,7 @@ async function syncData() {
         }
        
        loadData();
+       fetchHistoryData();
        showAlert("Data synced successfully!", "success", 2000);
        
     })

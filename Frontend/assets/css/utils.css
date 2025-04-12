@@ -2,6 +2,8 @@
   object-fit: cover;
 }
 
+
+/* for alert box */
 @keyframes slideIn {
   from { transform: translateY(-100%); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
@@ -44,6 +46,8 @@ input::-ms-reveal, input::-ms-clear {
   text-align: left;
 }
 
+
+/* for input box */
 .input-error {
   border: 1px solid red !important;
 }
@@ -55,6 +59,7 @@ input::-ms-reveal, input::-ms-clear {
 }
 
 
+/* For loader  */
 .loader {
   border: 6px solid #f3f3f3;
   border-top: 6px solid #3498db;
@@ -70,3 +75,19 @@ input::-ms-reveal, input::-ms-clear {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+
+
+
+/* Inactive Warning Button */
+.btn-outline-warning:not(.active) {
+  background-color: #fff3cd; /* Light yellow background */
+  color: #ffc107;            /* Yellow text */    /* Yellow border */
+}
+
+/* Inactive Primary Button */
+.btn-outline-primary:not(.active) {
+  background-color: #cfe2ff; /* Light blue background */
+  color: #0d6efd;            /* Primary blue text */   /* Primary blue border */
+}
+
+

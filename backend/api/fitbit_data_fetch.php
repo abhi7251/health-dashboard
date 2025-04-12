@@ -72,6 +72,8 @@ $stepsMap    = indexByDate($stepsData['activities-steps'] ?? []);
 $caloriesMap = indexByDate($caloriesData['activities-calories'] ?? []);
 $heartMap    = indexByDate($heartData['activities-heart'] ?? []);
 
+
+
 $sleepMap = [];
 foreach ($sleepData['sleep'] ?? [] as $entry) {
     $date = $entry['dateOfSleep'];
@@ -90,6 +92,8 @@ $loggedWeights = [];
 foreach ($weightEntries as $entry) {
     $loggedWeights[$entry['date']] = $entry['weight'];
 }
+
+
 
 // Fill weightMap with values for every date in the range
 $prevWeight = null;
@@ -119,16 +123,39 @@ $stmt = $conn->prepare("
         weight = VALUES(weight)
 ");
 
+function estimate_heart_rate(int $weight, int $steps, float $sleep_hours, int $calories) {
+    $base_hr = 60;
+    $step_factor = 0.7;
+    $calorie_factor = 0.4;
+    $sleep_factor = 1.2;
+    
+    if($weight <= 0) {
+       $weight = 65; // default weight in kg
+    }
+    
+    $heart_rate = (
+        $base_hr
+        + $step_factor * ($steps / 1000)
+        + $calorie_factor * ($calories / $weight)
+        - $sleep_factor * $sleep_hours
+    );
+    
+    return round($heart_rate, 2);
+}
+
 foreach ($period as $date) {
     $today = $date->format('Y-m-d');
 
     $steps = (int)($stepsMap[$today]['value'] ?? 0);
     $calories = (int)($caloriesMap[$today]['value'] ?? 0);
-    $heartRate = (int)($heartMap[$today]['value']['restingHeartRate'] ?? 0);
     $sleep = round(($sleepMap[$today] ?? 0) / 60, 1); // in hours
     $water = round(($waterMap[$today]['value'] ?? 0) / 1000, 2); // in liters
     $weight = isset($weightMap[$today]) ? round($weightMap[$today]['weight'], 1) : 0;
-
+    
+    $heartRate = estimate_heart_rate($weight, $steps, $sleep, $calories);
+    if ($heartRate < 0) {
+        $heartRate = 0; // Ensure heart rate is not negative
+    }
     $stmt->bind_param("ssiiiddd", $username, $today, $steps, $calories, $heartRate, $sleep, $water, $weight);
     $stmt->execute();
 }

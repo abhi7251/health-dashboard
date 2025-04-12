@@ -11,7 +11,7 @@
         </div>
 
         <div class="charts-row p-3">
-            <div class="chart-container" id="stepsChartContainer" onclick="showDetailChart('steps')">
+            <div class="chart-container" id="stepsChartContainer" onclick="setMetric('steps')">
                 <canvas id="stepsChart"></canvas>
                 <div class="chart-label">
                     <i class="fas fa-walking chart-icon"></i>
@@ -19,7 +19,7 @@
                     <span class="chart-title">Steps</span>
                 </div>
             </div>
-            <div class="chart-container" id="caloriesChartContainer" onclick="showDetailChart('calories')">
+            <div class="chart-container" id="caloriesChartContainer" onclick="setMetric('calories')">
                 <canvas id="caloriesChart"></canvas>
                 <div class="chart-label">
                     <i class="fas fa-fire chart-icon"></i>
@@ -27,7 +27,7 @@
                     <span class="chart-title">Calories</span>
                 </div>
             </div>
-            <div class="chart-container" id="heartRateChartContainer" onclick="showDetailChart('heartRate')">
+            <div class="chart-container" id="heartRateChartContainer" onclick="setMetric('heartRate')">
                 <canvas id="heartRateChart"></canvas>
                 <div class="chart-label">
                     <i class="fas fa-heart chart-icon"></i>
@@ -38,7 +38,7 @@
         </div>
 
         <div class="charts-row">
-            <div class="chart-container" id="waterChartContainer" onclick="showDetailChart('water')">
+            <div class="chart-container" id="waterChartContainer" onclick="setMetric('water')">
                 <canvas id="waterChart"></canvas>
                 <div class="chart-label">
                     <i class="fas fa-tint chart-icon"></i>
@@ -46,7 +46,7 @@
                     <span class="chart-title">Water</span>
                 </div>
             </div>
-            <div class="chart-container" id="sleepChartContainer" onclick="showDetailChart('sleep')">
+            <div class="chart-container" id="sleepChartContainer" onclick="setMetric('sleep')">
                 <canvas id="sleepChart"></canvas>
                 <div class="chart-label">
                     <i class="fas fa-bed chart-icon"></i>
@@ -54,7 +54,7 @@
                     <span class="chart-title">Sleep</span>
                 </div>
             </div>
-            <div class="chart-container" id="weightChartContainer" onclick="showDetailChart('weight')">
+            <div class="chart-container" id="weightChartContainer" onclick="setMetric('weight')">
                 <canvas id="weightChart"></canvas>
                 <div class="chart-label">
                     <i class="fas fa-weight chart-icon"></i>
@@ -66,14 +66,28 @@
 
         <div class="detail-chart-container mt-5 mx-auto" style="max-width: 800px;">
             <h4 id="detailChartTitle" class="detail-chart-title text-center mt-4">Steps History</h4>
+        
             <div class="d-flex justify-content-center mb-3">
-                <div class="btn-group" role="group" aria-label="Time range">
-                    <button type="button" class="btn btn-primary active" id="weeklyBtn" onclick="updateTimeRange('weekly')">Weekly</button>
+                <div class="btn-group me-3" role="group" aria-label="Time range">
+                    <button type="button" class="btn btn-outline-primary active" id="weeklyBtn" onclick="updateTimeRange('weekly')">Weekly</button>
                     <button type="button" class="btn btn-outline-primary" id="monthlyBtn" onclick="updateTimeRange('monthly')">Monthly</button>
                 </div>
+        
+                <!-- Chart Type Icons -->
+                <div class="btn-group" role="group" aria-label="Chart type">
+                    <button type="button" class="btn btn-outline-warning " id="lineChartBtn" onclick="setChartType('line')">
+                        <i class="fas fa-chart-line"></i> <!-- Line chart icon -->
+                    </button>
+                    <button type="button" class="btn btn-outline-warning active" id="barChartBtn" onclick="setChartType('bar')">
+                        <i class="fas fa-chart-bar"></i> <!-- Bar chart icon -->
+                    </button>
+                </div>
             </div>
+        
             <canvas id="fitnessChart"></canvas>
         </div>
+        
+        
     </div>
 </body>
 </html>
