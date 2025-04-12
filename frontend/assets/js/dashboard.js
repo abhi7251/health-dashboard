@@ -32,7 +32,6 @@ function createChart(chartId, value, maxValue, color) {
 
 function createDetailChart(canvasId, labels, data, color, type = 'bar') {
     const ctx = document.getElementById(canvasId).getContext('2d');
-
     let backgroundGradient = null;
 
     if (type === 'line') {
@@ -63,9 +62,10 @@ function createDetailChart(canvasId, labels, data, color, type = 'bar') {
         options: {
             responsive: true,
             maintainAspectRatio: true,
+            
             scales: {
                 y: {
-                    beginAtZero: true,
+                    beginAtZero: false,
                     grid: { display: false }
                 },
                 x: {
@@ -198,6 +198,8 @@ function setChartType(type) {
 
 async function fetchHistoryData() {
     metric = currentMetric, range = currentTimeRange;
+    console.log(`Fetching history data for metric: ${metric}, range: ${range}`);
+    
     fetch(`../backend/api/get_history_data.php?metric=${metric}&range=${range}`)
         .then(response => response.json())
         .then(data => {
@@ -214,7 +216,7 @@ async function fetchHistoryData() {
         });
 }
 
-async function syncData() {
+function syncData() {
     showAlert("Syncing data...", "info", 60000);   
     fetch('../backend/api/fitbit_data_fetch.php')
     .then(response => response.json())

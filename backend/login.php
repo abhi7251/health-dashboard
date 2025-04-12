@@ -38,6 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
     function login_log($username, $conn) {
+        date_default_timezone_set('Asia/Kolkata');
         $loginTime = date('Y-m-d H:i:s');
 
         // Get user IP address

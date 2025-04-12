@@ -47,6 +47,11 @@ curl_close($ch);
 
 
 if ($httpCode == 200) {
+    // Delete the token from the database
+    $stmt = $conn->prepare("DELETE FROM fitbit_tokens WHERE username = ?");
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $stmt->close();
     echo json_encode(['success' => 'Token revoked and deleted successfully']);
 } else {
     echo json_encode(['error' => 'Failed to revoke token']);
