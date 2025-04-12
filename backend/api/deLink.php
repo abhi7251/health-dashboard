@@ -45,8 +45,7 @@ $response = curl_exec($ch);
 $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 curl_close($ch);
 
-$conn->query("DELETE FROM fitbit_tokens WHERE username = '$username'");
-$conn->query("DELETE FROM fitbit_data WHERE username = '$username'");
+
 if ($httpCode == 200) {
     echo json_encode(['success' => 'Token revoked and deleted successfully']);
 } else {

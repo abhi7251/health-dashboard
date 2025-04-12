@@ -204,6 +204,18 @@ require '../config.php';
     </footer>
 
     </div>
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const linkError = <?php 
+           $linkError = isset($_SESSION['linkError']) ? $_SESSION['linkError'] : null;
+           unset($_SESSION['linkError']); // clear error once accessed
+           echo json_encode($linkError); 
+        ?>;
+        if (linkError) {
+        showAlert(linkError, "danger", 3000);
+        }
+    });
+    </script>
 
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>

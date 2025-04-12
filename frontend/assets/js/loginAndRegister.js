@@ -156,12 +156,12 @@ function logout(event) {
     event.preventDefault();
     showAlert("Logging out...", "warning", 3000);
     fetch("../backend/logout.php", { method: "POST" })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === "success") {
-                showAlert(data.message, "warning", 3000);
-                setLoginStatus(); // Refresh button
-                loadContent("index.php");
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === "success") {
+            showAlert(data.message, "warning", 3000);
+            setLoginStatus(); // Refresh button
+            loadContent("index.php");
             }
         })
         .catch(error => {

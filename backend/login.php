@@ -36,8 +36,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $row = $result->fetch_assoc();
 
+
+    function login_log($username, $conn) {
+        $loginTime = date('Y-m-d H:i:s');
+
+        // Get user IP address
+        $ipAddress = $_SERVER['REMOTE_ADDR'];
+        
+        // Insert into login_logs table
+        $stmt = $conn->prepare("INSERT INTO login_logs (username, login_time, ip_address) VALUES (?, ?, ?)");
+        $stmt->bind_param("sss", $username, $loginTime, $ipAddress);
+        $stmt->execute();
+        
+        //limit to last 10 logs per user
+        $cleanup = $conn->prepare("
+            DELETE FROM login_logs
+            WHERE username = ?
+            AND id NOT IN (
+                SELECT id FROM (
+                    SELECT id FROM login_logs WHERE username = ? ORDER BY login_time DESC LIMIT 10
+                ) AS temp
+            )
+        ");
+        $cleanup->bind_param("ss", $username, $username);
+        $cleanup->execute();
+    }
+    
     if (password_verify($password, $row['password'])) {
         $_SESSION['username'] = $username;
+        login_log($username, $conn); // Log the login attempt
         echo json_encode(['status' => 'success', 'message' => 'Login successful. Welcome, ' . htmlspecialchars($username) . '!', 'redirect' => 'index.php']);
         exit(); 
     } else {

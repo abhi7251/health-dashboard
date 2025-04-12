@@ -39,6 +39,8 @@ if (isset($_GET['code'])) {
         $access_token = $result['access_token'];
         $refresh_token = $result['refresh_token'];
         $user_id = $result['user_id'];
+
+
         
         if (!isset($_SESSION['username'])) {
             echo "Session expired. Please log in again.";
@@ -47,22 +49,28 @@ if (isset($_GET['code'])) {
 
         $username = $_SESSION['username'];
 
-        // Create table if it doesn't exist
-        $conn->query("CREATE TABLE IF NOT EXISTS fitbit_tokens (
-            username VARCHAR(100) PRIMARY KEY,
-            access_token TEXT,
-            refresh_token TEXT,
-            user_id VARCHAR(100),
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )");
-
-        $stmt = $conn->prepare("REPLACE INTO fitbit_tokens (username, access_token, refresh_token, user_id) VALUES (?, ?, ?, ?)");
-        $stmt->bind_param("ssss", $username, $access_token, $refresh_token, $user_id);
-        $stmt->execute();
-        $stmt->close();
-
+        $checkStmt = $conn->prepare("SELECT username FROM fitbit_tokens WHERE user_id = ?");
+        $checkStmt->bind_param("s", $user_id);
+        $checkStmt->execute();
+        $checkStmt->store_result();
+        
+        if ($checkStmt->num_rows > 0) {
+            // Update tokens for the existing user_id
+            $updateStmt = $conn->prepare("UPDATE fitbit_tokens SET access_token = ?, refresh_token = ? WHERE user_id = ?");
+            $updateStmt->bind_param("sss", $access_token, $refresh_token, $user_id);
+            $updateStmt->execute();
+            $updateStmt->close();
+            $_SESSION['linkError'] = "Account already linked.";
+        }else{
+            $stmt = $conn->prepare("REPLACE INTO fitbit_tokens (username, access_token, refresh_token, user_id) VALUES (?, ?, ?, ?)");
+            $stmt->bind_param("ssss", $username, $access_token, $refresh_token, $user_id);
+            $stmt->execute();
+            $stmt->close();
+        }
+        
         header("Location: ../../frontend/index.php");
-        exit();
+        $checkStmt->close();
+        exit();       
 
     } else {
         echo "<h4>Error: Failed to retrieve token</h4>";
