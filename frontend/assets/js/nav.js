@@ -19,20 +19,42 @@ document.getElementById("aboutLink").addEventListener("click", function (event) 
     });
 });
 
-first = true;
+let first = true;
+
 document.getElementById("activityLink").addEventListener("click", async function (event) {
     event.preventDefault();
+
     loadContent("dashboard.html", async function () {
         createCharts();
-        if (await checkLoginStatus() && await checkLinkedStatus()) {
-            await loadData();
-            await fetchHistoryData();
-            if(first){
+
+        const syncBtnDesktop = document.getElementById("syncBtnDesktop");
+        const syncBtnMobileWrapper = document.getElementById("syncBtnMobileWrapper");
+
+
+        const showSyncButtons = await checkLoginStatus() && await checkLinkedStatus();
+
+        toggleVisibility(syncBtnDesktop, showSyncButtons, "d-md-inline-block", "d-md-none");
+        toggleVisibility(syncBtnMobileWrapper, showSyncButtons, "d-block", "d-none");
+
+        if (showSyncButtons) {
+            if (first) {
                 syncData();
                 first = false;
             }
+            await loadData();
+            await fetchHistoryData();
         }
     });
 });
+
+function toggleVisibility(element, show, showClass, hideClass) {
+    if (!element) return;
+    element.classList.toggle(showClass, show);
+    element.classList.toggle(hideClass, !show);
+}
+
+
+
+
 
 

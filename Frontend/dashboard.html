@@ -7,18 +7,22 @@
             <h2 class="text-center fw-bold">Activity Dashboard</h2>
         
             <!-- Desktop Button: visible on md and up -->
-            <button class="btn btn-primary btn-sm position-absolute top-0 end-0 d-none d-md-inline-block" 
+            <button id="syncBtnDesktop"
+                    class="btn btn-primary btn-sm position-absolute top-0 end-0 d-none d-md-inline-block"
                     onclick="syncData()" aria-label="Sync Data">
                 <i class="fas fa-sync-alt"></i> Sync Data
             </button>
         
-            <!-- Mobile Button: visible below heading on small screens -->
-            <div class="d-block d-md-none text-center mt-2">
-                <button class="btn btn-primary btn-sm" onclick="syncData()" aria-label="Sync Data">
+            <!-- Mobile Button Wrapper: visible only on small screens -->
+            <div id="syncBtnMobileWrapper" class="d-block d-md-none text-center mt-2 d-none">
+                <button id="syncBtnMobile"
+                        class="btn btn-primary btn-sm"
+                        onclick="syncData()" aria-label="Sync Data">
                     <i class="fas fa-sync-alt"></i> Sync Data
                 </button>
             </div>
         </div>
+        
         
 
         <div class="charts-row p-3">
