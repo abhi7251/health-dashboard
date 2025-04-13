@@ -91,6 +91,18 @@ async function setLoginStatus() {
         const user = await res.json();
         if (user.status === "success") {
             userNameEl.textContent = user.name;
+            // Set first letter of name as profile initial
+            const profileInitial = document.getElementById("profileInitial");
+            const profileButton = document.getElementById('profileDropdown');
+            if (user.name && profileInitial) {
+                //retrieve last name first letter
+                const lastName = user.name.split(" ").slice(-1)[0];
+                profileInitial.textContent = user.name.trim().charAt(0).toUpperCase()+lastName.charAt(0).toUpperCase();
+                // Generate a random color for the profile button
+                const randomColor = "#" + Math.floor(Math.random() * 16777215).toString(16);
+                profileButton.style.backgroundColor = randomColor;
+            }
+
             userEmailEl.textContent = user.email;
             userUserNameEl.innerHTML = `<b>Hi, </b> ${user.username}`;
         } else {

@@ -35,14 +35,14 @@ document.getElementById("activityLink").addEventListener("click", async function
 
         toggleVisibility(syncBtnDesktop, showSyncButtons, "d-md-inline-block", "d-md-none");
         toggleVisibility(syncBtnMobileWrapper, showSyncButtons, "d-block", "d-none");
+        await loadData();
+        await fetchHistoryData();
 
         if (showSyncButtons) {
             if (first) {
                 syncData();
                 first = false;
             }
-            await loadData();
-            await fetchHistoryData();
         }
     });
 });
@@ -52,9 +52,3 @@ function toggleVisibility(element, show, showClass, hideClass) {
     element.classList.toggle(showClass, show);
     element.classList.toggle(hideClass, !show);
 }
-
-
-
-
-
-

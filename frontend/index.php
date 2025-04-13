@@ -64,12 +64,13 @@ require '../config.php';
                     </a>
                     <!-- Profile Icon with Dropdown -->
                     <div id="profileDropdownContainer" class="dropdown d-inline-none">
-                        <button class="btn btn-secondary dropdown-toggle rounded-circle p-0" type="button" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="width: 40px; height: 40px; overflow: hidden;">
-                            <img src="assets/img/profile.png" alt="Profile" style="width: 100%; height: 100%; object-fit: cover;">
+                        <button class="btn btn-secondary rounded-circle p-0 d-flex align-items-center justify-content-center" 
+                                type="button" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false" 
+                                style="width: 40px; height: 40px; overflow: hidden; font-weight: bold; font-size: 1rem; backgroundColor: #ffffff; border-style: none;">
+                            <span id="profileInitial" class="text-white"></span>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
-
-                            <li class="dropdown-item-text  small" id="userUsername">username</li>
+                            <li class="dropdown-item-text small" id="userUsername">username</li>
                             <li><hr class="dropdown-divider"></li>
                             <li class="dropdown-item-text fw-bold" id="userName">name</li>
                             <li class="dropdown-item-text text-muted small" id="userEmail">email</li>
