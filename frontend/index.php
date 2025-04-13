@@ -54,19 +54,19 @@ require '../config.php';
                 <!-- Login and Link Buttons (Centered on Mobile, Right on Desktop) -->
                 <div class="w-100 text-center text-md-end mt-2 mt-md-0">
                     <button class="btn btn-primary me-2" id="loginLink" type="button" 
-                            style="color: white; background: var(--bs-dark); border-style: none; border-radius: 12px; padding: 6px 12px;">
+                            style="color: white; display:none; background: var(--bs-dark); border-style: none; border-radius: 12px; padding: 6px 12px;">
                         Login / Register
                     </button>
-                    <a id="linkLink" style="display:inline-block;">
+                    <a id="linkLink" style="display:none;">
                     <button class="btn btn-warning m-2" type="button">
                         Link <i class="fa fa-arrow-right ps-0 ms-2" style="font-size: 20px;"></i>
                     </button>
                     </a>
                     <!-- Profile Icon with Dropdown -->
-                    <div id="profileDropdownContainer" class="dropdown d-inline-none">
+                    <div id="profileDropdownContainer" class="dropdown d-none">
                         <button class="btn btn-secondary rounded-circle p-0 d-flex align-items-center justify-content-center" 
                                 type="button" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false" 
-                                style="width: 40px; height: 40px; overflow: hidden; font-weight: bold; font-size: 1rem; backgroundColor: #ffffff; border-style: none;">
+                                style="width: 40px; height: 40px; overflow: hidden; font-weight: bold; font-size: 1rem; background-color: #ffffff; border-style: none;">
                             <span id="profileInitial" class="text-white"></span>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">

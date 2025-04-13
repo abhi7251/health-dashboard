@@ -35,10 +35,10 @@ document.getElementById("activityLink").addEventListener("click", async function
 
         toggleVisibility(syncBtnDesktop, showSyncButtons, "d-md-inline-block", "d-md-none");
         toggleVisibility(syncBtnMobileWrapper, showSyncButtons, "d-block", "d-none");
-        await loadData();
-        await fetchHistoryData();
-
+        
         if (showSyncButtons) {
+            await loadData();
+            await fetchHistoryData();
             if (first) {
                 syncData();
                 first = false;
