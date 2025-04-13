@@ -31,6 +31,10 @@ function createChart(chartId, value, maxValue, color) {
 }
 
 function createDetailChart(canvasId, labels, data, color, type = 'bar') {
+    if (!canvasId) {
+        console.error(`Canvas element with id '${canvasId}' not found.`);
+        return;
+    }
     const ctx = document.getElementById(canvasId).getContext('2d');
     let backgroundGradient = null;
 
@@ -122,7 +126,7 @@ function updateCharts() {
                 id === 'sleep' ? ' hrs' :
                 id === 'weight' ? ' kg' :
                 id === 'heartRate' ? ' bpm' :
-                id === 'calories' ? ' kcal' : 
+                id === 'calories' ? ' cal' : 
                 ''
             );
         }
@@ -150,8 +154,9 @@ async function loadData() {
             chartData.water.value = data.water || 0;
             chartData.sleep.value = data.sleep || 0;
             chartData.weight.value = data.weight || 0;
-            
-            updateCharts();
+            if(document.getElementById('dashboard')){
+                updateCharts();
+            }
         })
         .catch(error => showAlert("Error loading data: " + error, "danger", 2000));
         
@@ -209,15 +214,17 @@ async function fetchHistoryData() {
             }
             labels = data.labels || [];
             values = data.values || [];
-            createBigChart();
+            if(document.getElementById('dashboard')){
+                createBigChart();
+            }
         })
         .catch(error => {
             console.error("Fetch error:", error);
         });
 }
 
-function syncData() {
-    showAlert("Syncing data...", "info", 60000);   
+async function syncData() {
+    showAlert("Syncing data...", "info",30000);   
     fetch('../backend/api/fitbit_data_fetch.php')
     .then(response => response.json())
     .then(data => {
@@ -233,6 +240,8 @@ function syncData() {
     })
     .catch(error => showAlert("Error syncing data: " + error, "danger", 3000));
 }
+
+setInterval(syncData, 5 * 60 * 1000);
 
 
 

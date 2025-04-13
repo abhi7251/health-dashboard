@@ -2,6 +2,7 @@
 require_once '../config.php'; 
 header('Content-Type: application/json');
 
+
 if (isset($_SESSION['username'])) {
     // If the user is logged in, destroy session
     session_unset();

@@ -18,12 +18,13 @@ function loadContent(page, callback = null) {
     // Start a timer
     const startTime = Date.now();
 
+
     fetch(page)
         .then(response => response.text())
         .then(data => {
             const elapsed = Date.now() - startTime;
             const delay = Math.max(250 - elapsed, 0); 
-
+            console.log("Elapsed time:", elapsed, "ms, Delay:", delay, "ms");
             setTimeout(() => {
                 if (page === "index.php") {
                     const parser = new DOMParser();
@@ -51,5 +52,12 @@ function loadContent(page, callback = null) {
         .catch(error => {
             console.error("Error:", error);
         });
+        
 }
 
+document.addEventListener("DOMContentLoaded", function () { 
+    // Remove the #_=_ fragment from the URL
+    if (window.location.hash === "#_=_") {
+        history.replaceState(null, null, window.location.href.split("#")[0]);
+    }
+});

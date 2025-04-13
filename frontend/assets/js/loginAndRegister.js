@@ -151,24 +151,36 @@ function loginHandler(event) {
     loadContent("login.html");
 }
 
-// Logout function
-function logout(event) {
+
+
+async function logout(event) {
     event.preventDefault();
     showAlert("Logging out...", "warning", 3000);
-    fetch("../backend/logout.php", { method: "POST" })
-    .then(response => response.json())
-    .then(data => {
+
+    try {
+        const isLinked = await checkLinkedStatus();
+        
+        // send the request to backend to clear the session
+        const response = await fetch("../backend/logout.php", { method: "POST" });
+        const data = await response.json();
+
         if (data.status === "success") {
-            showAlert(data.message, "warning", 3000);
-            setLoginStatus(); // Refresh button
-            loadContent("index.php");
+            showAlert(data.message, "success", 3000);
+            setLoginStatus(); // Refresh button 
+
+            if (isLinked) {
+               fitbitLogout();
+            } else {
+                // If the account isn't linked, just load the homepage 
+                loadContent("index.php");
             }
-        })
-        .catch(error => {
-            console.error("Logout Error:", error);
-            showAlert("An error occurred while logging out.", "danger", 3000);
-        });
+        }
+    } catch (error) {
+        console.error("Logout Error:", error);
+        showAlert("An error occurred while logging out.", "danger", 3000);
+    }
 }
+
 
 // Login function with showAlert
 function login() {

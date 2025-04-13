@@ -205,6 +205,14 @@ require '../config.php';
 
     </div>
     <script>
+    function fitbitLogout() {
+        const logoutWindow = window.open("https://www.fitbit.com/logout", "_blank");
+        setTimeout(() => {
+            if (logoutWindow) {
+                logoutWindow.close();
+            }
+        }, 1500);
+    }
     document.addEventListener("DOMContentLoaded", function () {
         const linkError = <?php 
            $linkError = isset($_SESSION['linkError']) ? $_SESSION['linkError'] : null;
@@ -212,7 +220,11 @@ require '../config.php';
            echo json_encode($linkError); 
         ?>;
         if (linkError) {
-        showAlert(linkError, "danger", 3000);
+        showAlert(linkError, "danger", 1000);
+        setTimeout(() => {
+            fitbitLogout();
+        }, 1000); 
+        
         }
     });
     </script>

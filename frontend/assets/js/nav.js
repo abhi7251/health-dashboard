@@ -19,6 +19,7 @@ document.getElementById("aboutLink").addEventListener("click", function (event) 
     });
 });
 
+first = true;
 document.getElementById("activityLink").addEventListener("click", async function (event) {
     event.preventDefault();
     loadContent("dashboard.html", async function () {
@@ -26,6 +27,10 @@ document.getElementById("activityLink").addEventListener("click", async function
         if (await checkLoginStatus() && await checkLinkedStatus()) {
             await loadData();
             await fetchHistoryData();
+            if(first){
+                syncData();
+                first = false;
+            }
         }
     });
 });
