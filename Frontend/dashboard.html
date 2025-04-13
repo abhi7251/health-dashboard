@@ -5,10 +5,21 @@
     <div class="container mt-4" id="dashboard">
         <div class="position-relative mb-3">
             <h2 class="text-center fw-bold">Activity Dashboard</h2>
-            <button class="btn btn-primary btn-sm position-absolute top-0 end-0" onclick="syncData()" aria-label="Sync Data">
+        
+            <!-- Desktop Button: visible on md and up -->
+            <button class="btn btn-primary btn-sm position-absolute top-0 end-0 d-none d-md-inline-block" 
+                    onclick="syncData()" aria-label="Sync Data">
                 <i class="fas fa-sync-alt"></i> Sync Data
             </button>
+        
+            <!-- Mobile Button: visible below heading on small screens -->
+            <div class="d-block d-md-none text-center mt-2">
+                <button class="btn btn-primary btn-sm" onclick="syncData()" aria-label="Sync Data">
+                    <i class="fas fa-sync-alt"></i> Sync Data
+                </button>
+            </div>
         </div>
+        
 
         <div class="charts-row p-3">
             <div class="chart-container" id="stepsChartContainer" onclick="setMetric('steps')">
@@ -67,19 +78,23 @@
         <div class="detail-chart-container mt-5 mx-auto" style="max-width: 800px;">
             <h4 id="detailChartTitle" class="detail-chart-title text-center mt-4">Steps History</h4>
         
-            <div class="d-flex justify-content-center mb-3">
-                <div class="btn-group me-3" role="group" aria-label="Time range">
+            <div class="d-flex align-items-center justify-content-between mb-3">
+                <!-- Left Placeholder (same width as right content) -->
+                <div style="width: 80px;"></div>
+            
+                <!-- Centered Time Range Buttons -->
+                <div class="btn-group" role="group" aria-label="Time range">
                     <button type="button" class="btn btn-outline-primary active" id="weeklyBtn" onclick="updateTimeRange('weekly')">Weekly</button>
                     <button type="button" class="btn btn-outline-primary" id="monthlyBtn" onclick="updateTimeRange('monthly')">Monthly</button>
                 </div>
-        
-                <!-- Chart Type Icons -->
+            
+                <!-- Right: Chart Type Buttons -->
                 <div class="btn-group" role="group" aria-label="Chart type">
-                    <button type="button" class="btn btn-outline-warning " id="lineChartBtn" onclick="setChartType('line')">
-                        <i class="fas fa-chart-line"></i> <!-- Line chart icon -->
+                    <button type="button" class="btn btn-outline-warning" id="lineChartBtn" onclick="setChartType('line')">
+                        <i class="fas fa-chart-line"></i>
                     </button>
                     <button type="button" class="btn btn-outline-warning active" id="barChartBtn" onclick="setChartType('bar')">
-                        <i class="fas fa-chart-bar"></i> <!-- Bar chart icon -->
+                        <i class="fas fa-chart-bar"></i>
                     </button>
                 </div>
             </div>
