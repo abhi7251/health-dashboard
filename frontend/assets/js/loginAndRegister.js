@@ -72,23 +72,50 @@ async function checkLoginStatus() {
 
 async function setLoginStatus() {
     const loginButton = document.getElementById("loginLink");
+    const profileContainer = document.getElementById("profileDropdownContainer");
+    const userNameEl = document.getElementById("userName");
+    const userUserNameEl = document.getElementById("userUsername");
+    const userEmailEl = document.getElementById("userEmail");
     const linkButton = document.getElementById("linkLink");
 
-    const isLoggedIn = await checkLoginStatus(); // now this works correctly
+    const isLoggedIn = await checkLoginStatus();
 
     if (isLoggedIn) {
-        loginButton.innerHTML = "Logout";
-        loginButton.removeEventListener("click", loginHandler);
-        loginButton.addEventListener("click", logout);
+        // Hide login, show profile
+        loginButton.style.display = "none";
+        profileContainer.classList.remove("d-none");
+        profileContainer.classList.add("d-inline-block");
+
+        // Fetch user data (replace this with your actual endpoint)
+        const res = await fetch("../backend/get_user.php");
+        const user = await res.json();
+        if (user.status === "success") {
+            userNameEl.textContent = user.name;
+            userEmailEl.textContent = user.email;
+            userUserNameEl.innerHTML = `<b>Hi, </b> ${user.username}`;
+        } else {
+            showAlert(user.message, "danger", 3000);
+            userNameEl.textContent = "User";
+            userEmailEl.textContent = "email";
+            userUserNameEl.textContent = "username";
+        }
         linkButton.style.display = "inline-block";
-        setLinkedButton(linkButton); // this must also be async if it awaits inside
+        setLinkedButton(linkButton);
+
     } else {
+        // Show login, hide profile
+        loginButton.style.display = "inline-block";
+        profileContainer.classList.add("d-none");
+        profileContainer.classList.remove("d-inline-block");
+
+        linkButton.style.display = "none";
+
         loginButton.innerHTML = "Login / Register";
         loginButton.removeEventListener("click", logout);
         loginButton.addEventListener("click", loginHandler);
-        linkButton.style.display = "none";
     }
 }
+
 
 
 
@@ -166,7 +193,7 @@ async function logout(event) {
 
         if (data.status === "success") {
             showAlert(data.message, "success", 3000);
-            setLoginStatus(); // Refresh button 
+            await setLoginStatus(); // Refresh button 
 
             if (isLinked) {
                fitbitLogout();
@@ -292,4 +319,11 @@ $(document).ready(function () {
         validateAllFields();  // Runs every second to check for autofilled values
     }, 1000);
 });
+
+document.addEventListener("click", function (e) {
+    if (e.target && e.target.id === "logoutButton") {
+        logout(e);
+    }
+});
+
 

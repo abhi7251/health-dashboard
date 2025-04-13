@@ -57,15 +57,26 @@ require '../config.php';
                             style="color: white; background: var(--bs-dark); border-style: none; border-radius: 12px; padding: 6px 12px;">
                         Login / Register
                     </button>
-
-                    <a id="linkLink" style="display:none;">
-                    <button class="btn btn-warning" type="button">
+                    <a id="linkLink" style="display:inline-block;">
+                    <button class="btn btn-warning m-2" type="button">
                         Link <i class="fa fa-arrow-right ps-0 ms-2" style="font-size: 20px;"></i>
                     </button>
                     </a>
+                    <!-- Profile Icon with Dropdown -->
+                    <div id="profileDropdownContainer" class="dropdown d-inline-none">
+                        <button class="btn btn-secondary dropdown-toggle rounded-circle p-0" type="button" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="width: 40px; height: 40px; overflow: hidden;">
+                            <img src="assets/img/profile.png" alt="Profile" style="width: 100%; height: 100%; object-fit: cover;">
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
 
-
-
+                            <li class="dropdown-item-text  small" id="userUsername">username</li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li class="dropdown-item-text fw-bold" id="userName">name</li>
+                            <li class="dropdown-item-text text-muted small" id="userEmail">email</li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><button class="dropdown-item text-danger" id="logoutButton">Logout</button></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
