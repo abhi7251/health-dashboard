@@ -96,8 +96,10 @@ async function setLoginStatus() {
             const profileButton = document.getElementById('profileDropdown');
             if (user.name && profileInitial) {
                 //retrieve last name first letter
-                const lastName = user.name.split(" ").slice(-1)[0];
-                profileInitial.textContent = user.name.trim().charAt(0).toUpperCase()+lastName.charAt(0).toUpperCase();
+                const nameParts = user.name.trim().split(" ");
+                const firstInitial = nameParts[0].charAt(0).toUpperCase();
+                const lastInitial = nameParts.length > 1 ? nameParts[nameParts.length - 1].charAt(0).toUpperCase() : '';
+                profileInitial.textContent = firstInitial + lastInitial;
                 // Generate a random color for the profile button
                 const randomColor = '#' + ((Math.random() * 0x191919) | 0).toString(16).padStart(6, '0');
                 profileButton.style.backgroundColor = randomColor;
