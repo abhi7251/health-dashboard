@@ -44,7 +44,6 @@ function createDetailChart(canvasId, labels, data, color, type = 'bar') {
         backgroundGradient.addColorStop(0, color + '66'); // top (semi-opaque)
         backgroundGradient.addColorStop(1, color + '00'); // bottom (transparent)
     }
-    
 
     new Chart(ctx, {
         type: type,
@@ -77,11 +76,12 @@ function createDetailChart(canvasId, labels, data, color, type = 'bar') {
                 }
             },
             plugins: {
-                legend: { display: false }
+                legend: { display: false },
             }
         }
     });
 }
+
 
 let currentMetric = 'steps';
 let currentTimeRange = 'weekly';
