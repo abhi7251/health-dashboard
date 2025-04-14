@@ -99,7 +99,7 @@ async function setLoginStatus() {
                 const lastName = user.name.split(" ").slice(-1)[0];
                 profileInitial.textContent = user.name.trim().charAt(0).toUpperCase()+lastName.charAt(0).toUpperCase();
                 // Generate a random color for the profile button
-                const randomColor = "#" + Math.floor(Math.random() * 16777215).toString(16);
+                const randomColor = '#' + ((Math.random() * 0x191919) | 0).toString(16).padStart(6, '0');
                 profileButton.style.backgroundColor = randomColor;
             }
 
@@ -208,11 +208,11 @@ async function logout(event) {
             await setLoginStatus(); // Refresh button 
 
             if (isLinked) {
+               await resetChartData();
                fitbitLogout();
-            } else {
-                // If the account isn't linked, just load the homepage 
-                loadContent("index.php");
-            }
+            } 
+
+            loadContent("index.php");
         }
     } catch (error) {
         console.error("Logout Error:", error);
@@ -338,4 +338,25 @@ document.addEventListener("click", function (e) {
     }
 });
 
+
+function deleteUser(){
+    const confirmed = confirm("Are you sure you want to delete your account? This action cannot be undone.");
+    if (!confirmed) return;
+
+    fetch("../backend/delete_user.php", { method: "POST" })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === "success") {
+                showAlert(data.message, "success", 3000);
+                setLoginStatus(); // Refresh button 
+                loadContent("index.php");
+            } else {
+                showAlert(data.message, "danger", 3000);
+            }
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            showAlert("An error occurred. Please try again.", "danger", 3000);
+        });
+}
 

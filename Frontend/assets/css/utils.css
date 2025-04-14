@@ -91,3 +91,22 @@ input::-ms-reveal, input::-ms-clear {
 }
 
 
+/* Default: Mobile style (centered) */
+#syncBtn {
+    position: static;
+    margin-top: 1rem;
+    text-align: center;
+}
+
+/* Desktop style (top-right corner) */
+@media (min-width: 768px) {
+    #syncBtn {
+        position: absolute;
+        top: 0;
+        right: 0;
+        margin-top: 0;
+        text-align: right;
+    }
+}
+
+

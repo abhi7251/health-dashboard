@@ -75,7 +75,8 @@ require '../config.php';
                             <li class="dropdown-item-text fw-bold" id="userName">name</li>
                             <li class="dropdown-item-text text-muted small" id="userEmail">email</li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><button class="dropdown-item text-danger" id="logoutButton">Logout</button></li>
+                            <li><button class="dropdown-item text-dark" id="logoutButton">Logout</button></li>
+                            <li><button class="dropdown-item text-danger" onclick="deleteUser()">Delete Account</button></li>
                         </ul>
                     </div>
                 </div>
@@ -252,13 +253,13 @@ require '../config.php';
 
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-
+    
+    
+    <script src="assets/js/dashboard.js"></script>
     <script src="assets/js/loader.js"></script>
     <script src="assets/js/nav.js"></script>
     <script src="assets/js/loginAndRegister.js"></script>
     <script src="assets/js/utils.js"></script>
-    <script src="assets/js/dashboard.js"></script>
 
 </body>
 

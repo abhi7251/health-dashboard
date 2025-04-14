@@ -96,7 +96,7 @@ const titleMap = {
     'weight': 'Weight History'
 };
 
-const chartData = {
+let chartData = {
     steps: { value: 0, maxValue: 10000, color: '#4caf50' },
     calories: { value: 0, maxValue: 2500, color: '#ff9800' },
     heartRate: { value: 0, maxValue: 220, color: '#f44336' },
@@ -118,6 +118,8 @@ async function createCharts() {
 }
 
 function updateCharts() {
+    if(!document.getElementById('dashboard')) return;
+
     Object.entries(chartData).forEach(([id, data]) => {
         const valueSpan = document.querySelector(`#${id}ChartContainer .chart-value`);
         if (valueSpan) {
@@ -154,9 +156,7 @@ async function loadData() {
             chartData.water.value = data.water || 0;
             chartData.sleep.value = data.sleep || 0;
             chartData.weight.value = data.weight || 0;
-            if(document.getElementById('dashboard')){
-                updateCharts();
-            }
+            updateCharts();
         })
         .catch(error => showAlert("Error loading data: " + error, "danger", 2000));
         
@@ -181,6 +181,8 @@ function updateDetailChartTitle() {
 
 labels = [], values = [];
 function createBigChart() {
+    if(!document.getElementById('dashboard')) return;
+
     Chart.getChart("fitnessChart")?.destroy();
     createDetailChart('fitnessChart', labels, values, chartData[currentMetric].color,currentChartType);
 }
@@ -214,9 +216,7 @@ async function fetchHistoryData() {
             }
             labels = data.labels || [];
             values = data.values || [];
-            if(document.getElementById('dashboard')){
-                createBigChart();
-            }
+            createBigChart();
         })
         .catch(error => {
             console.error("Fetch error:", error);
@@ -239,6 +239,17 @@ async function syncData() {
        
     })
     .catch(error => showAlert("Error syncing data: " + error, "danger", 3000));
+}
+
+
+async function resetChartData(){
+    labels = [], values = [];
+    //reset chartData data
+    Object.values(chartData).forEach((data) => {
+        data.value = 0;
+    });
+    updateCharts();
+    createBigChart();
 }
 
 setInterval(syncData, 5 * 60 * 1000);
