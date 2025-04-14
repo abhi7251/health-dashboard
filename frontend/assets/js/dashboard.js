@@ -214,8 +214,13 @@ async function fetchHistoryData() {
                 console.error("Invalid historical data format.");
                 return;
             }
-            labels = data.labels || [];
-            values = data.values || [];
+            if(data.labels && data.labels.length > 0){
+                labels = data.labels;
+            }
+            if(data.values && data.values.length > 0){
+                values = data.values;
+            }
+            
             createBigChart();
         })
         .catch(error => {

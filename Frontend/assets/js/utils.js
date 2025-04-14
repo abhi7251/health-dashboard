@@ -64,3 +64,44 @@ $(document).ready(function () {
         }
     });
 });
+
+document.addEventListener('keydown', async function(event) {
+    if (event.altKey) {
+      switch (event.key.toLowerCase()) {
+        case 'r':
+          event.preventDefault();
+          syncData();
+          break;
+        case 'l':
+          event.preventDefault();
+          if (await checkLoginStatus()) {
+            logout(event);
+          } 
+          else {
+            loadContent("login.html");
+          }
+          break;
+        case 'g':
+            event.preventDefault();
+            loadContent("register.html");
+            break;
+
+        case 'a':
+            event.preventDefault();
+            loadDashBoard();
+            break;
+
+        case 'h':
+            event.preventDefault();
+            loadContent("index.php");
+            break;
+
+        case 'b':
+            event.preventDefault();
+            loadContent("about.html");
+            break;
+
+      }
+    }
+  });
+  

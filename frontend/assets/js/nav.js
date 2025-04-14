@@ -20,24 +20,28 @@ document.getElementById("aboutLink").addEventListener("click", function (event) 
 });
 
 let first = true;
+document.getElementById("activityLink").addEventListener("click", loadDashBoard);
 
-document.getElementById("activityLink").addEventListener("click", async function (event) {
-    event.preventDefault();
-    
-    loadContent("dashboard.html", async function () {
-        createCharts();
+async function loadDashBoard(event = null) {
+  event?.preventDefault();
 
-        if (await checkLoginStatus() && await checkLinkedStatus()) {
-            $("#syncBtn").css("display", "inline-block");
+  loadContent("dashboard.html", async function () {
+    createCharts();
 
-            await loadData();
-            await fetchHistoryData();
-            if (first) {
-                syncData();
-                first = false;
-            }
-           
-        }
-    });
-});
+    if (await checkLoginStatus() && await checkLinkedStatus()) {
+      $("#syncBtn").css("display", "inline-block");
+
+      await loadData();
+      await fetchHistoryData();
+
+      if (first) {
+        await syncData();
+        first = false;
+      }
+    } else {
+      resetChartData();
+    }
+  });
+}
+
 

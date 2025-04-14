@@ -29,22 +29,7 @@ async function setLinkedButton(linkLink) {
         icon.classList.replace("fa-arrow-right", "fa-sync");
 
         // Set onclick for de-link
-        button.onclick = async () => {
-            const confirmed = confirm("Are you sure you want to de-link your Fitbit account?");
-            if (!confirmed) return;
-
-            const res = await fetch("../backend/api/deLink.php", { method: "POST" });
-            const result = await res.json();
-
-            if (result.success) {
-                showAlert("Fitbit account de-linked!", "success", 3000);
-                setLinkedButton(linkLink); // Refresh button state
-                loadContent("index.php");
-                
-            } else {
-                showAlert("Failed to de-link account.", "danger", 3000);
-            }
-        };
+        button.onclick = delink;
 
     } else {
         button.textContent = "Link";
@@ -57,6 +42,23 @@ async function setLinkedButton(linkLink) {
         };
     }
 }
+
+async function delink () {
+    const confirmed = confirm("Are you sure you want to de-link your Fitbit account?");
+    if (!confirmed) return;
+
+    const res = await fetch("../backend/api/deLink.php", { method: "POST" });
+    const result = await res.json();
+
+    if (result.success) {
+        showAlert("Fitbit account de-linked!", "success", 3000);
+        setLinkedButton(linkLink); // Refresh button state
+        loadContent("index.php");
+        
+    } else {
+        showAlert("Failed to de-link account.", "danger", 3000);
+    }
+};
 
 // Function to check login status and update button
 async function checkLoginStatus() {
@@ -91,9 +93,11 @@ async function setLoginStatus() {
         const user = await res.json();
         if (user.status === "success") {
             userNameEl.textContent = user.name;
+
             // Set first letter of name as profile initial
             const profileInitial = document.getElementById("profileInitial");
             const profileButton = document.getElementById('profileDropdown');
+
             if (user.name && profileInitial) {
                 //retrieve last name first letter
                 const nameParts = user.name.trim().split(" ");
@@ -196,6 +200,10 @@ function loginHandler(event) {
 
 async function logout(event) {
     event.preventDefault();
+    //confirm and logout
+
+    const confirmed = confirm("Are you sure you want to log out?");
+    if (!confirmed) return;
     showAlert("Logging out...", "warning", 3000);
 
     try {
