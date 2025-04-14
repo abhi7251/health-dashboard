@@ -251,8 +251,9 @@ require '../config.php';
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js" ></script>
     <script src="assets/js/animated.js" ></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
-   
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
     
     <script src="assets/js/dashboard.js"></script>
     <script src="assets/js/loader.js"></script>
