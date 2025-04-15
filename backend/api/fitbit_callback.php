@@ -2,7 +2,7 @@
 require '../../config.php';
 require 'apiInfo.php';
 
-$redirect_uri = "http://localhost/health-dashboard/backend/api/fitbit_callback.php"; 
+$redirect_uri = "http://52.66.243.41/health-dashboard/backend/api/fitbit_callback.php"; 
 if (isset($_GET['code'])) {
     $code = $_GET['code'];
 
