@@ -30,7 +30,8 @@ async function loadDashBoard(event = null) {
 
     if (await checkLoginStatus() && await checkLinkedStatus()) {
       $("#syncBtn").css("display", "inline-block");
-
+       setMetric();
+       updateDetailChartTitle();
       await loadData();
       await fetchHistoryData();
 

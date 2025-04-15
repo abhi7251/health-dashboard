@@ -255,6 +255,8 @@ async function resetChartData(){
     });
     updateCharts();
     createBigChart();
+    updateDetailChartTitle();
+    setMetric();
 }
 
 setInterval(syncData, 5 * 60 * 1000);
