@@ -76,7 +76,7 @@ function isTokenValid($access_token) {
 
     if (curl_errno($ch)) {
         $error_msg = curl_error($ch);
-        error_log("❌ cURL Error in isTokenValid: $error_msg");
+        error_log("cURL Error in isTokenValid: $error_msg");
         curl_close($ch);
         return null;
     }

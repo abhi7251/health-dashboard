@@ -35,7 +35,7 @@ async function loadDashBoard(event = null) {
       await fetchHistoryData();
 
       if (first) {
-        await syncData();
+        syncData();
         first = false;
       }
     } else {

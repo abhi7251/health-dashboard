@@ -81,11 +81,6 @@ document.addEventListener('keydown', async function(event) {
             loadContent("login.html");
           }
           break;
-        case 'g':
-            event.preventDefault();
-            loadContent("register.html");
-            break;
-
         case 'a':
             event.preventDefault();
             loadDashBoard();
