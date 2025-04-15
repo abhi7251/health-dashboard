@@ -69,7 +69,7 @@ $stmt->bind_param('sssss', $name, $username, $email, $mobile, $hashedPassword);
 if ($stmt->execute()) {
     $response["status"] = "success";
     $response["message"] = "Registration successful!";
-    $response["redirect"] = "login.html";
+    $response["redirect"] = "frontend/login.html";
 } else {
     $response["message"] = "Error: " . $stmt->error;
 }

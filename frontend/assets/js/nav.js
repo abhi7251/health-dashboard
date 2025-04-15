@@ -25,24 +25,28 @@ document.getElementById("activityLink").addEventListener("click", loadDashBoard)
 async function loadDashBoard(event = null) {
   event?.preventDefault();
 
-  loadContent("frontend/dashboard.html", async function () {
-    createCharts();
+  if(await checkLoginStatus()){
+    loadContent("frontend/dashboard.html", async function () {
+      createCharts();
+      if ( await checkLinkedStatus()) {
+        $("#syncBtn").css("display", "inline-block");
+        setMetric();
+        updateDetailChartTitle();
+        await loadData();
+        await fetchHistoryData();
 
-    if (await checkLoginStatus() && await checkLinkedStatus()) {
-      $("#syncBtn").css("display", "inline-block");
-       setMetric();
-       updateDetailChartTitle();
-      await loadData();
-      await fetchHistoryData();
-
-      if (first) {
-        syncData();
-        first = false;
+        if (first) {
+          syncData();
+          first = false;
+        }
+      } else {
+        resetChartData();
       }
-    } else {
-      resetChartData();
-    }
-  });
+    });
+  }else{
+    loadContent("frontend/login.html", function () {
+    });
+  }
 }
 
 
