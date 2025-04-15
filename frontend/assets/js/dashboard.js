@@ -176,7 +176,8 @@ function setMetric(metric = null) {
 }
 
 function updateDetailChartTitle() {
-    document.getElementById('detailChartTitle').textContent = titleMap[currentMetric] || 'Activity History';
+    $('#detailChartTitle').text(titleMap[currentMetric] || 'Activity History');
+
 }
 
 labels = [], values = [];
