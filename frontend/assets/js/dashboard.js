@@ -142,7 +142,7 @@ function updateCharts() {
 }
 
 async function loadData() {
-    fetch('../backend/api/get_today_data.php')
+    fetch('backend/api/get_today_data.php')
     .then(response => response.json())
     .then(data => {
             if (data.error) {
@@ -207,7 +207,7 @@ async function fetchHistoryData() {
     metric = currentMetric, range = currentTimeRange;
     console.log(`Fetching history data for metric: ${metric}, range: ${range}`);
     
-    fetch(`../backend/api/get_history_data.php?metric=${metric}&range=${range}`)
+    fetch(`backend/api/get_history_data.php?metric=${metric}&range=${range}`)
         .then(response => response.json())
         .then(data => {
             if (!Array.isArray(data.values)) {
@@ -230,7 +230,7 @@ async function fetchHistoryData() {
 
 async function syncData() {
     showAlert("Syncing data...", "info",30000);   
-    fetch('../backend/api/fitbit_data_fetch.php')
+    fetch('backend/api/fitbit_data_fetch.php')
     .then(response => response.json())
     .then(data => {
         if (data.error) {

@@ -8,7 +8,7 @@ document.addEventListener("click", function (event) {
 
 async function checkLinkedStatus() {
     try {
-        const response = await fetch("../backend/api/isLinked.php");
+        const response = await fetch("backend/api/isLinked.php");
         const data = await response.json();
         return data.linked === true;
     } catch (error) {
@@ -38,7 +38,7 @@ async function setLinkedButton(linkLink) {
 
         // Set onclick for link
         button.onclick = () => {
-            window.location.href = "../backend/api/fitbit_auth.php";
+            window.location.href = "backend/api/fitbit_auth.php";
         };
     }
 }
@@ -47,7 +47,7 @@ async function delink () {
     const confirmed = confirm("Are you sure you want to de-link your Fitbit account?");
     if (!confirmed) return;
 
-    const res = await fetch("../backend/api/deLink.php", { method: "POST" });
+    const res = await fetch("backend/api/deLink.php", { method: "POST" });
     const result = await res.json();
 
     if (result.success) {
@@ -63,7 +63,7 @@ async function delink () {
 // Function to check login status and update button
 async function checkLoginStatus() {
     try {
-        const response = await fetch("../backend/session_status.php");
+        const response = await fetch("backend/session_status.php");
         const data = await response.json();
         return data.logged_in === true;
     } catch (error) {
@@ -89,7 +89,7 @@ async function setLoginStatus() {
         profileContainer.classList.add("d-inline-block");
 
         // Fetch user data (replace this with your actual endpoint)
-        const res = await fetch("../backend/get_user.php");
+        const res = await fetch("backend/get_user.php");
         const user = await res.json();
         if (user.status === "success") {
             userNameEl.textContent = user.name;
@@ -210,7 +210,7 @@ async function logout(event) {
         const isLinked = await checkLinkedStatus();
         
         // send the request to backend to clear the session
-        const response = await fetch("../backend/logout.php", { method: "POST" });
+        const response = await fetch("backend/logout.php", { method: "POST" });
         const data = await response.json();
 
         if (data.status === "success") {
@@ -236,7 +236,7 @@ function login() {
     let form = document.getElementById("loginForm");
     let formData = new FormData(form);
 
-    fetch("../backend/login.php", {
+    fetch("backend/login.php", {
         method: "POST",
         body: formData
     })
@@ -266,7 +266,7 @@ function register() {
     let form = document.getElementById("registerForm");
     let formData = new FormData(form);
 
-    fetch("../backend/register.php", {
+    fetch("backend/register.php", {
         method: "POST",
         body: formData
     })
@@ -299,7 +299,7 @@ $(document).ready(function () {
 
     function checkAvailability(field, value, fieldName) {
         $.ajax({
-            url: "../backend/check_availability.php",
+            url: "backend/check_availability.php",
             type: "POST",
             data: { [field]: value },
             dataType: "json",
@@ -353,7 +353,7 @@ function deleteUser(){
     const confirmed = confirm("Are you sure you want to delete your account? This action cannot be undone.");
     if (!confirmed) return;
 
-    fetch("../backend/delete_user.php", { method: "POST" })
+    fetch("backend/delete_user.php", { method: "POST" })
         .then(response => response.json())
         .then(data => {
             if (data.status === "success") {
