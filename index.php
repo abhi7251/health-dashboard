@@ -1,5 +1,5 @@
 <?php
-require '../config.php';
+require 'config.php';
 ?>
 <!DOCTYPE html>
 <html data-bs-theme="light" lang="en">
@@ -9,13 +9,13 @@ require '../config.php';
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>Health Dashboard</title>
-    <link rel="icon" type="image/png" href="assets/img/logo.png">
+    <link rel="icon" type="image/png" href="frontend/assets/img/logo.png">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="assets/css/utils.css">
-    <link rel="stylesheet" href="assets/css/styles.css">
-    <link rel="stylesheet" href="assets/css/dashboard.css">
+    <link rel="stylesheet" href="frontend/assets/css/utils.css">
+    <link rel="stylesheet" href="frontend/assets/css/styles.css">
+    <link rel="stylesheet" href="frontend/assets/css/dashboard.css">
 
 
 </head>
@@ -30,7 +30,7 @@ require '../config.php';
             <!-- Logo and Title -->
             <div class="d-flex align-items-center me-auto">
                 <a class="navbar-brand d-flex align-items-center homeLink" href="#">
-                    <img src="assets/img/logo.png" alt="Health Tracker Logo" style="height: 50px; margin-right: 10px;"> 
+                    <img src="frontend/assets/img/logo.png" alt="Health Tracker Logo" style="height: 50px; margin-right: 10px;"> 
                     <h3 class="mb-0">Health Tracker</h3>
                 
 
@@ -249,17 +249,17 @@ require '../config.php';
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" ></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js" ></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js" ></script>
-    <script src="assets/js/animated.js" ></script>
+    <script src="frontend/assets/js/animated.js" ></script>
 
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     
-    <script src="assets/js/dashboard.js"></script>
-    <script src="assets/js/loader.js"></script>
-    <script src="assets/js/nav.js"></script>
-    <script src="assets/js/loginAndRegister.js"></script>
-    <script src="assets/js/utils.js"></script>
+    <script src="frontend/assets/js/dashboard.js"></script>
+    <script src="frontend/assets/js/loader.js"></script>
+    <script src="frontend/assets/js/nav.js"></script>
+    <script src="frontend/assets/js/loginAndRegister.js"></script>
+    <script src="frontend/assets/js/utils.js"></script>
 
 </body>
 

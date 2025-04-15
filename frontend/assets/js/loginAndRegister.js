@@ -1,7 +1,7 @@
 document.addEventListener("click", function (event) {
     if (event.target.id === "registerLink") {
         event.preventDefault();
-        loadContent("register.html");
+        loadContent("frontend/register.html");
     }
 });
 
@@ -193,7 +193,7 @@ function isFormValid(formId){
 // Load login page
 function loginHandler(event) {
     event.preventDefault();
-    loadContent("login.html");
+    loadContent("frontend/login.html");
 }
 
 

@@ -1,4 +1,4 @@
-loadGLBModel("watch", "assets/img/watch.glb", 1);
+loadGLBModel("watch", "frontend/assets/img/watch.glb", 1);
 
 function loadContent(page, callback = null) {
     const contentDiv = document.getElementById("content");
@@ -17,8 +17,6 @@ function loadContent(page, callback = null) {
     
     // Start a timer
     const startTime = Date.now();
-
-
     fetch(page)
         .then(response => response.text())
         .then(data => {
@@ -31,12 +29,12 @@ function loadContent(page, callback = null) {
                     const doc = parser.parseFromString(data, "text/html");
                     const content = doc.getElementById("content");
                     contentDiv.innerHTML = content.innerHTML;
-                    loadGLBModel("watch", "assets/img/watch.glb", 1);
+                    loadGLBModel("watch", "frontend/assets/img/watch.glb", 1);
                     setActiveLinkById("homeLink");
                 } else {
-                    if (page === "about.html") { 
+                    if (page === "frontend/about.html") { 
                         setActiveLinkById("aboutLink");
-                    } else if (page === "dashboard.html") { 
+                    } else if (page === "frontend/dashboard.html") { 
                         setActiveLinkById("activityLink");
                     }
                     contentDiv.innerHTML = data;

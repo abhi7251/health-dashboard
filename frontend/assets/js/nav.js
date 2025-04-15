@@ -15,7 +15,7 @@ for (var i = 0; i < elements.length; i++) {
 // Handle other navigation links
 document.getElementById("aboutLink").addEventListener("click", function (event) {
     event.preventDefault();
-    loadContent("about.html", function () { 
+    loadContent("frontend/about.html", function () { 
     });
 });
 
@@ -25,7 +25,7 @@ document.getElementById("activityLink").addEventListener("click", loadDashBoard)
 async function loadDashBoard(event = null) {
   event?.preventDefault();
 
-  loadContent("dashboard.html", async function () {
+  loadContent("frontend/dashboard.html", async function () {
     createCharts();
 
     if (await checkLoginStatus() && await checkLinkedStatus()) {
