@@ -68,7 +68,7 @@ if (isset($_GET['code'])) {
             $stmt->close();
         }
         
-        header("Location: ../../frontend/index.php");
+        header("Location: ../../index.php");
         $checkStmt->close();
         exit();       
 
