@@ -255,11 +255,11 @@ require 'config.php';
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     
-    <script src="frontend/assets/js/dashboard.js"></script>
-    <script src="frontend/assets/js/loader.js"></script>
-    <script src="frontend/assets/js/nav.js"></script>
-    <script src="frontend/assets/js/loginAndRegister.js"></script>
-    <script src="frontend/assets/js/utils.js"></script>
+    <script src="frontend/assets/js/dashboard.js?v=1.0.1"></script>
+    <script src="frontend/assets/js/loader.js?v=1.0.1"></script>
+    <script src="frontend/assets/js/nav.js?v=1.0.1"></script>
+    <script src="frontend/assets/js/loginAndRegister.js?v=1.0.1"></script>
+    <script src="frontend/assets/js/utils.js?v=1.0.1"></script>
 
 </body>
 

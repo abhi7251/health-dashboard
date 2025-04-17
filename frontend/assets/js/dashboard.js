@@ -135,8 +135,9 @@ function updateCharts() {
         //update chart value in the doughnut chart
         const chart = Chart.getChart(id + "Chart");
         if (chart) {
-            let remainingValue = data.value > data.maxValue ? 0 : data.maxValue - data.value;
-            chart.data.datasets[0].data[0] = remainingValue;
+            chart.data.datasets[0].data[0] = data.value;
+            chart.data.datasets[0].data[1] = data.value > data.maxValue ? 0 : data.maxValue - data.value;
+            chart.update();
         }
     });
 }
